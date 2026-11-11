@@ -18,6 +18,9 @@ El objetivo es construir un MVP pequeño y funcional, priorizando la correción,
 - `pnpm run dev` - Iniciar servidor desarrollo
 - `pnpm lint` - Ejecutar linter
 - `pnpm build` - Comprueba que la aplicación compila correctamente
+- `pnpm test` - Ejecuta tests
+- `pnpm format` - Ejecuta formatter
+- `pnpm format:check` - Ejecuta formatter en modo check sin aplicar
 
 # Convenciones de desarrollo
 
