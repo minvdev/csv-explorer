@@ -1,0 +1,15 @@
+{
+	// Oxfmt formatea al guardar (configuración en .oxfmtrc.json, script: pnpm format)
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+
+	// Indentación al escribir, alineada con .oxfmtrc.json
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+
+	// Excepción de tabSize
+	"[json][jsonc][html]": {
+		"editor.tabSize": 2
+	}
+}
