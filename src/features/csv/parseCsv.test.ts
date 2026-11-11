@@ -13,7 +13,7 @@ function parseErrorOf(text: string): CsvParseError {
 }
 
 describe("parseCsv", () => {
-	it("parsea cabeceras y filas de un CSV válido", () => {
+	it("parses headers and rows from a valid CSV", () => {
 		const data = parseCsv("nombre,edad\nAna,30\nLuis,25");
 		expect(data.headers).toEqual(["nombre", "edad"]);
 		expect(data.rows).toEqual([
@@ -22,13 +22,13 @@ describe("parseCsv", () => {
 		]);
 	});
 
-	it("preserva comas y comillas dentro de las celdas", () => {
+	it("preserves commas and quotes inside cells", () => {
 		const data = parseCsv('nombre,nota\n"Pérez, Ana","85,5"');
 		expect(data.headers).toEqual(["nombre", "nota"]);
 		expect(data.rows).toEqual([{ nombre: "Pérez, Ana", nota: "85,5" }]);
 	});
 
-	it("descarta las líneas en blanco", () => {
+	it("discards blank lines", () => {
 		const data = parseCsv("nombre,edad\nAna,30\n\n\nLuis,25\n");
 		expect(data.rows).toEqual([
 			{ nombre: "Ana", edad: "30" },
@@ -36,15 +36,15 @@ describe("parseCsv", () => {
 		]);
 	});
 
-	it("lanza CsvParseError 'empty' con un texto vacío", () => {
+	it("throws CsvParseError 'empty' with empty text", () => {
 		expect(parseErrorOf("").kind).toBe("empty");
 	});
 
-	it("lanza CsvParseError 'empty' con solo cabecera y sin filas", () => {
+	it("throws CsvParseError 'empty' with headers only and no rows", () => {
 		expect(parseErrorOf("nombre,edad\n").kind).toBe("empty");
 	});
 
-	it("lanza CsvParseError 'invalid' con un CSV mal formado", () => {
+	it("throws CsvParseError 'invalid' with malformed CSV", () => {
 		expect(parseErrorOf('nombre,edad\n"Ana,30').kind).toBe("invalid");
 	});
 });
