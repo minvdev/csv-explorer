@@ -15,6 +15,7 @@ function App() {
 	const [error, setError] = useState<string | null>(null);
 
 	const handleFileSelected = async (file: File) => {
+		setData(null);
 		setError(null);
 
 		let text: string;
