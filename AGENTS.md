@@ -35,7 +35,7 @@ El objetivo es construir un MVP pequeño y funcional, priorizando la correción,
 # Pruebas y validación
 
 - Añade pruebas para la lógica que tenga casos límite relevantes.
-- Comprueba la compilación con `pnpm run build` después de realizar cambios significativos.
+- Tras aplicar cambios, se considera apta la validación si los siguientes comandos no lanzan errores: `pnpm lint`, `pnpm format:check`, `pnpm test`, `pnpm build`.
 - No afirmes que una prueba se ha ejecutado correctamente si no la has ejecutado.
 
 # Forma de trabajar
