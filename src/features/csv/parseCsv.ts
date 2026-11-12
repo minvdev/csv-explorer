@@ -14,25 +14,37 @@ export class CsvParseError extends Error {
 	}
 }
 
-function parseCsv(text: string): CsvData {
-	if (text.trim() === "") {
-		throw new CsvParseError("empty", "The file is empty");
-	}
+function parseCsv(text: string): Promise<CsvData> {
+	return new Promise((resolve, reject) => {
+		if (text.trim() === "") {
+			reject(new CsvParseError("empty", "The file is empty"));
+			return;
+		}
 
-	const results = Papa.parse<CsvRow>(text, {
-		header: true,
-		skipEmptyLines: true,
+		Papa.parse<CsvRow>(text, {
+			header: true,
+			skipEmptyLines: true,
+			worker: true,
+			complete: (results) => {
+				if (results.errors.length > 0) {
+					reject(
+						new CsvParseError("invalid", `invalid CSV: ${results.errors[0].message}`),
+					);
+					return;
+				}
+
+				if (!results.meta.fields || results.data.length === 0) {
+					reject(new CsvParseError("empty", "The CSV file does not contain rows"));
+					return;
+				}
+
+				resolve({ headers: results.meta.fields, rows: results.data });
+			},
+			error: (error: Error) => {
+				reject(error);
+			},
+		});
 	});
-
-	if (results.errors.length > 0) {
-		throw new CsvParseError("invalid", `invalid CSV: ${results.errors[0].message}`);
-	}
-
-	if (!results.meta.fields || results.data.length === 0) {
-		throw new CsvParseError("empty", "The CSV file does not contain rows");
-	}
-
-	return { headers: results.meta.fields, rows: results.data };
 }
 
 export default parseCsv;

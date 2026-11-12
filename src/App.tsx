@@ -32,7 +32,7 @@ function App() {
 		}
 
 		try {
-			setStatus({ kind: "success", data: parseCsv(text) });
+			setStatus({ kind: "success", data: await parseCsv(text) });
 		} catch (caught) {
 			const message =
 				caught instanceof CsvParseError
