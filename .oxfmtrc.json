@@ -2,7 +2,9 @@
 	"$schema": "./node_modules/oxfmt/configuration_schema.json",
 	"useTabs": true,
 	"tabWidth": 4,
-	"sortImports": true,
+	"sortImports": {
+		"internalPattern": ["@/", "@features", "@components"]
+	},
 	"overrides": [
 		{
 			"files": ["*.json", "*.jsonc", "*.html"],

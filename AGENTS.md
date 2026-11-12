@@ -32,6 +32,11 @@ El objetivo es construir un MVP pequeño y funcional, priorizando la correción,
 - No implementes funcionalidades que no formen parte de la tarea actual.
 - No modifiques archivos ajenos a la tarea sin razón justificada.
 
+# Convención de imports
+
+- Usa el alias más cercano (`@components`, `@features`, `@`); la importación relativa (`./modulo`) solo para módulos del mismo directorio.
+- Aplicado por oxlint; oxfmt agrupa los alias con los imports locales.
+
 # Pruebas y validación
 
 - Añade pruebas para la lógica que tenga casos límite relevantes.

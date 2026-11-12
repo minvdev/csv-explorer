@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import DataTable from "./features/csv/DataTable";
-import FileSelector from "./features/csv/FileSelector";
-import parseCsv, { CsvParseError } from "./features/csv/parseCsv";
-import type { CsvData } from "./features/csv/types";
+import DataTable from "@features/csv/DataTable";
+import FileSelector from "@features/csv/FileSelector";
+import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
+import type { CsvData } from "@features/csv/types";
 
 const ERROR_MESSAGES: Record<CsvParseError["kind"], string> = {
 	empty: "El archivo está vacío",
