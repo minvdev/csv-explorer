@@ -43,6 +43,11 @@ El objetivo es construir un MVP pequeño y funcional, priorizando la correción,
 - Tras aplicar cambios, se considera apta la validación si los siguientes comandos no lanzan errores: `pnpm lint`, `pnpm format:check`, `pnpm test`, `pnpm build`.
 - No afirmes que una prueba se ha ejecutado correctamente si no la has ejecutado.
 
+# Commits
+
+- Por defecto, no hagas commits de los cambios; solo haz commit cuando el usuario lo pida de manera explícita.
+- Cuando se pida hacer commits, crea una rama cuyo nombre esté relacionado con la feature que se esté implementando y haz los commits en fast forward.
+
 # Forma de trabajar
 
 - Aborda una tarea cada vez y limita los cambios a lo necesario.
