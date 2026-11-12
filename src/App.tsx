@@ -1,51 +1,53 @@
 import { useState } from "react";
 
+import StatusMessage from "@components/StatusMessage";
 import DataTable from "@features/csv/DataTable";
 import FileSelector from "@features/csv/FileSelector";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
 import type { CsvData } from "@features/csv/types";
 
 const ERROR_MESSAGES: Record<CsvParseError["kind"], string> = {
-	empty: "El archivo está vacío",
+	empty: "El archivo está vacío o no contiene datos",
 	invalid: "El archivo no tiene un formato CSV válido",
 };
 
+type LoadStatus =
+	| { kind: "idle" }
+	| { kind: "loading" }
+	| { kind: "error"; message: string }
+	| { kind: "success"; data: CsvData };
+
 function App() {
-	const [data, setData] = useState<CsvData | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [status, setStatus] = useState<LoadStatus>({ kind: "idle" });
 
 	const handleFileSelected = async (file: File) => {
-		setData(null);
-		setError(null);
+		setStatus({ kind: "loading" });
 
 		let text: string;
 		try {
 			text = await file.text();
 		} catch {
-			setError("No se ha podido leer el archivo");
+			setStatus({ kind: "error", message: "No se ha podido leer el archivo" });
 			return;
 		}
 
 		try {
-			setData(parseCsv(text));
+			setStatus({ kind: "success", data: parseCsv(text) });
 		} catch (caught) {
-			if (caught instanceof CsvParseError) {
-				setError(ERROR_MESSAGES[caught.kind]);
-			} else {
-				setError("Se ha producido un error inesperado");
-			}
+			const message =
+				caught instanceof CsvParseError
+					? ERROR_MESSAGES[caught.kind]
+					: "Se ha producido un error inesperado";
+			setStatus({ kind: "error", message });
 		}
 	};
 
 	return (
 		<>
 			<FileSelector onFileSelected={handleFileSelected} />
-			{data && <DataTable data={data} />}
-			{error && (
-				<p role="alert" className="mt-2 text-sm text-red-600">
-					{error}
-				</p>
-			)}
+			{status.kind === "loading" && <StatusMessage message="Cargando archivo…" tone="info" />}
+			{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
+			{status.kind === "success" && <DataTable data={status.data} />}
 		</>
 	);
 }
