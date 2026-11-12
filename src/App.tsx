@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import StatusMessage from "@components/StatusMessage";
-import DataTable from "@features/csv/DataTable";
 import FileSelector from "@features/csv/FileSelector";
+import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
 import type { CsvData } from "@features/csv/types";
 
@@ -47,7 +47,7 @@ function App() {
 			<FileSelector onFileSelected={handleFileSelected} />
 			{status.kind === "loading" && <StatusMessage message="Cargando archivo…" tone="info" />}
 			{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
-			{status.kind === "success" && <DataTable data={status.data} />}
+			{status.kind === "success" && <PaginatedDataTable data={status.data} />}
 		</>
 	);
 }
