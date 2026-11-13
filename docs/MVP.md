@@ -14,6 +14,9 @@ y filtrarlos mediante una búsqueda de texto.
 - [x] Gestionar errores: archivo vacío, CSV inválido y errores de lectura.
 - [x] Paginación: Evitar que la ui se relentice en cada render por exceso de filas.
 - [x] Worker para evitar bloqueo con el parser.
+- [ ] Selector de columnas numéricas con resumen de datos: mínimo, máximo y media.
+- [ ] Parser robusto: soporte de comillas, separadores, celdas vacías y entradas inválidas.
+- [ ] Diseño final pulido con estilos modernos.
 
 ## Fuera de alcance
 
@@ -28,5 +31,8 @@ y filtrarlos mediante una búsqueda de texto.
 - La aplicación permite cargar un CSV válido y visualizar sus datos.
 - La búsqueda filtra correctamente las filas.
 - Los archivos inválidos producen mensajes comprensibles.
+- El selector de columnas numéricas muestra el mínimo, máximo y media de la columna.
+- El parser maneja comillas, distintos separadores, celdas vacías y entradas inválidas.
+- La interfaz presenta el diseño final pulido con estilos modernos.
 - La interfaz contempla los estados inicial, carga, resultado vacío y error.
 - La aplicación compila correctamente para producción.
