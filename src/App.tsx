@@ -17,6 +17,10 @@ type LoadStatus =
 	| { kind: "error"; message: string }
 	| { kind: "success"; data: CsvData };
 
+function countMessage(rows: number, columns: number): string {
+	return `${rows} ${rows === 1 ? "fila" : "filas"}, ${columns} ${columns === 1 ? "columna" : "columnas"}`;
+}
+
 function App() {
 	const [status, setStatus] = useState<LoadStatus>({ kind: "idle" });
 
@@ -47,7 +51,15 @@ function App() {
 			<FileSelector onFileSelected={handleFileSelected} />
 			{status.kind === "loading" && <StatusMessage message="Cargando archivo…" tone="info" />}
 			{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
-			{status.kind === "success" && <PaginatedDataTable data={status.data} />}
+			{status.kind === "success" && (
+				<>
+					<StatusMessage
+						message={countMessage(status.data.rows.length, status.data.headers.length)}
+						tone="info"
+					/>
+					<PaginatedDataTable data={status.data} />
+				</>
+			)}
 		</>
 	);
 }
