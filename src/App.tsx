@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import StatusMessage from "@components/StatusMessage";
 import FileSelector from "@features/csv/FileSelector";
+import filterRows from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
+import SearchBar from "@features/csv/SearchBar";
 import type { CsvData } from "@features/csv/types";
 
 const ERROR_MESSAGES: Record<CsvParseError["kind"], string> = {
@@ -23,9 +25,11 @@ function countMessage(rows: number, columns: number): string {
 
 function App() {
 	const [status, setStatus] = useState<LoadStatus>({ kind: "idle" });
+	const [query, setQuery] = useState("");
 
 	const handleFileSelected = async (file: File) => {
 		setStatus({ kind: "loading" });
+		setQuery("");
 
 		let text: string;
 		try {
@@ -46,18 +50,34 @@ function App() {
 		}
 	};
 
+	const data = status.kind === "success" ? status.data : null;
+	const filteredRows = useMemo(() => (data ? filterRows(data.rows, query) : []), [data, query]);
+	const searching = query.trim() !== "";
+
 	return (
 		<>
 			<FileSelector onFileSelected={handleFileSelected} />
 			{status.kind === "loading" && <StatusMessage message="Cargando archivo…" tone="info" />}
 			{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
-			{status.kind === "success" && (
+			{data && (
 				<>
-					<StatusMessage
-						message={countMessage(status.data.rows.length, status.data.headers.length)}
-						tone="info"
-					/>
-					<PaginatedDataTable data={status.data} />
+					<SearchBar onChange={setQuery} value={query} />
+					{searching ? (
+						<StatusMessage
+							message={`${filteredRows.length} de ${data.rows.length} filas`}
+							tone="info"
+						/>
+					) : (
+						<StatusMessage
+							message={countMessage(data.rows.length, data.headers.length)}
+							tone="info"
+						/>
+					)}
+					{filteredRows.length > 0 ? (
+						<PaginatedDataTable data={{ headers: data.headers, rows: filteredRows }} />
+					) : (
+						<StatusMessage message="Sin resultados" tone="info" />
+					)}
 				</>
 			)}
 		</>
