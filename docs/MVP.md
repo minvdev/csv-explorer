@@ -9,8 +9,8 @@ y filtrarlos mediante una búsqueda de texto.
 
 - [x] Seleccionar y cargar un archivo CSV local.
 - [x] Mostrar las cabeceras y filas en una tabla.
-- [ ] Buscar texto en las filas y filtrar los resultados.
-- [ ] Mostrar el número de filas y columnas.
+- [x] Buscar texto en las filas y filtrar los resultados.
+- [x] Mostrar el número de filas y columnas.
 - [x] Gestionar errores: archivo vacío, CSV inválido y errores de lectura.
 - [x] Paginación: Evitar que la ui se relentice en cada render por exceso de filas.
 - [x] Worker para evitar bloqueo con el parser.
