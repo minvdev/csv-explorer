@@ -14,6 +14,17 @@ export class CsvParseError extends Error {
 	}
 }
 
+// Non-fatal Papa warnings we tolerate and normalize instead of rejecting the file.
+const TOLERATED_ERROR_CODES = new Set(["UndetectableDelimiter", "TooFewFields", "TooManyFields"]);
+
+function sanitizeRow(row: CsvRow, headers: string[]): CsvRow {
+	const sanitized: CsvRow = {};
+	for (const header of headers) {
+		sanitized[header] = row[header] ?? "";
+	}
+	return sanitized;
+}
+
 function parseCsv(text: string): Promise<CsvData> {
 	return new Promise((resolve, reject) => {
 		if (text.trim() === "") {
@@ -23,13 +34,14 @@ function parseCsv(text: string): Promise<CsvData> {
 
 		Papa.parse<CsvRow>(text, {
 			header: true,
-			skipEmptyLines: true,
+			skipEmptyLines: "greedy",
 			worker: true,
 			complete: (results) => {
-				if (results.errors.length > 0) {
-					reject(
-						new CsvParseError("invalid", `invalid CSV: ${results.errors[0].message}`),
-					);
+				const fatal = results.errors.find(
+					(error) => !TOLERATED_ERROR_CODES.has(error.code),
+				);
+				if (fatal) {
+					reject(new CsvParseError("invalid", `invalid CSV: ${fatal.message}`));
 					return;
 				}
 
@@ -38,7 +50,12 @@ function parseCsv(text: string): Promise<CsvData> {
 					return;
 				}
 
-				resolve({ headers: results.meta.fields, rows: results.data });
+				resolve({
+					headers: results.meta.fields,
+					rows: results.data.map((row) =>
+						sanitizeRow(row, results.meta.fields as string[]),
+					),
+				});
 			},
 			error: (error: Error) => {
 				reject(error);
