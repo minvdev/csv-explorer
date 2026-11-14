@@ -15,7 +15,7 @@ y filtrarlos mediante una búsqueda de texto.
 - [x] Paginación: Evitar que la ui se relentice en cada render por exceso de filas.
 - [x] Worker para evitar bloqueo con el parser.
 - [x] Selector de columnas numéricas con resumen de datos: mínimo, máximo y media.
-- [ ] Parser robusto: soporte de comillas, separadores, celdas vacías y entradas inválidas.
+- [x] Parser robusto: soporte de comillas, separadores, celdas vacías y entradas inválidas.
 - [ ] Diseño final pulido con estilos modernos.
 
 ## Fuera de alcance
