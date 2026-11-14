@@ -1,14 +1,16 @@
 interface StatusMessageProps {
 	message: string;
-	tone: "info" | "error";
+	tone: "info" | "warning" | "error";
 }
 
 const ROLE_BY_TONE: Record<StatusMessageProps["tone"], string> = {
 	info: "status",
+	warning: "status",
 	error: "alert",
 };
 const CLASS_BY_TONE: Record<StatusMessageProps["tone"], string> = {
 	info: "text-gray-600",
+	warning: "text-orange-600",
 	error: "text-red-600",
 };
 

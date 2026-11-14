@@ -37,7 +37,7 @@ function PaginatedDataTable({ data }: PaginatedDataTableProps) {
 		<>
 			{selectedColumn && <ColumnStats header={selectedColumn} rows={data.rows} />}
 			<DataTable
-				data={{ headers: data.headers, rows: visibleRows }}
+				data={{ headers: data.headers, rows: visibleRows, warnings: data.warnings }}
 				onSelectColumn={handleSelectColumn}
 				selectedColumn={selectedColumn}
 			/>

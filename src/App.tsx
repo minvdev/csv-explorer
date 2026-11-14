@@ -53,6 +53,7 @@ function App() {
 	const data = status.kind === "success" ? status.data : null;
 	const filteredRows = useMemo(() => (data ? filterRows(data.rows, query) : []), [data, query]);
 	const searching = query.trim() !== "";
+	const hasWarnings = data !== null && data.warnings.length > 0;
 
 	return (
 		<>
@@ -62,6 +63,12 @@ function App() {
 			{data && (
 				<>
 					<SearchBar onChange={setQuery} value={query} />
+					{hasWarnings && (
+						<StatusMessage
+							message="El archivo tiene un formato CSV irregular: se han aplicado correcciones automáticas que pueden no coincidir con los datos originales"
+							tone="warning"
+						/>
+					)}
 					{searching ? (
 						<StatusMessage
 							message={`${filteredRows.length} de ${data.rows.length} filas`}
@@ -74,7 +81,13 @@ function App() {
 						/>
 					)}
 					{filteredRows.length > 0 ? (
-						<PaginatedDataTable data={{ headers: data.headers, rows: filteredRows }} />
+						<PaginatedDataTable
+							data={{
+								headers: data.headers,
+								rows: filteredRows,
+								warnings: data.warnings,
+							}}
+						/>
 					) : (
 						<StatusMessage message="Sin resultados" tone="info" />
 					)}
