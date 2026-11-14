@@ -37,6 +37,9 @@ function parseCsv(text: string): Promise<CsvData> {
 			skipEmptyLines: "greedy",
 			worker: true,
 			complete: (results) => {
+				const tolerated = results.errors.filter((error) =>
+					TOLERATED_ERROR_CODES.has(error.code),
+				);
 				const fatal = results.errors.find(
 					(error) => !TOLERATED_ERROR_CODES.has(error.code),
 				);
@@ -55,6 +58,7 @@ function parseCsv(text: string): Promise<CsvData> {
 					rows: results.data.map((row) =>
 						sanitizeRow(row, results.meta.fields as string[]),
 					),
+					warnings: tolerated.map((error) => error.code),
 				});
 			},
 			error: (error: Error) => {

@@ -104,4 +104,20 @@ describe("parseCsv", () => {
 			{ a: "3", b: "4" },
 		]);
 	});
+
+	it("reports no warnings for a clean CSV", async () => {
+		const data = await parseCsv("nombre,edad\nAna,30");
+		expect(data.warnings).toEqual([]);
+	});
+
+	it("reports warnings for tolerated errors without rejecting the file", async () => {
+		const data = await parseCsv("a,b\n1");
+		expect(data.rows).toEqual([{ a: "1", b: "" }]);
+		expect(data.warnings).toContain("TooFewFields");
+	});
+
+	it("reports the delimiter warning for a single-column quoted CSV", async () => {
+		const data = await parseCsv('nombre\n"Ana"');
+		expect(data.warnings).toContain("UndetectableDelimiter");
+	});
 });
