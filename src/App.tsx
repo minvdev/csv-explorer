@@ -17,7 +17,7 @@ type LoadStatus =
 	| { kind: "idle" }
 	| { kind: "loading" }
 	| { kind: "error"; message: string }
-	| { kind: "success"; data: CsvData };
+	| { kind: "success"; data: CsvData; fileName: string };
 
 function countMessage(rows: number, columns: number): string {
 	return `${rows} ${rows === 1 ? "fila" : "filas"}, ${columns} ${columns === 1 ? "columna" : "columnas"}`;
@@ -40,7 +40,7 @@ function App() {
 		}
 
 		try {
-			setStatus({ kind: "success", data: await parseCsv(text) });
+			setStatus({ kind: "success", data: await parseCsv(text), fileName: file.name });
 		} catch (caught) {
 			const message =
 				caught instanceof CsvParseError
