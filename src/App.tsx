@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 
 import StatusMessage from "@components/StatusMessage";
+import SearchField from "@components/toolbar/SearchField";
 import FileSelector from "@features/csv/FileSelector";
 import filterRows from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
-import SearchBar from "@features/csv/SearchBar";
 import type { CsvData } from "@features/csv/types";
 
 const ERROR_MESSAGES: Record<CsvParseError["kind"], string> = {
@@ -65,7 +65,7 @@ function App() {
 				{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
 				{data && (
 					<>
-						<SearchBar onChange={setQuery} value={query} />
+						<SearchField onChange={setQuery} value={query} />
 						{hasWarnings && (
 							<StatusMessage
 								message="El archivo tiene un formato CSV irregular: se han aplicado correcciones automáticas que pueden no coincidir con los datos originales"
