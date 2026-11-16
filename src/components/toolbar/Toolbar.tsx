@@ -26,7 +26,7 @@ function Toolbar({
 	onFileSelected,
 }: ToolbarProps) {
 	return (
-		<header className="flex h-[50px] shrink-0 items-center gap-3 border-b border-orange-100 bg-orange-50 px-4">
+		<header className="flex h-12 shrink-0 items-center gap-3 border-b border-orange-100 bg-orange-50 px-4">
 			<Brand />
 			{fileName && (
 				<>
