@@ -56,44 +56,48 @@ function App() {
 	const hasWarnings = data !== null && data.warnings.length > 0;
 
 	return (
-		<>
-			<FileSelector onFileSelected={handleFileSelected} />
-			{status.kind === "loading" && <StatusMessage message="Cargando archivo…" tone="info" />}
-			{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
-			{data && (
-				<>
-					<SearchBar onChange={setQuery} value={query} />
-					{hasWarnings && (
-						<StatusMessage
-							message="El archivo tiene un formato CSV irregular: se han aplicado correcciones automáticas que pueden no coincidir con los datos originales"
-							tone="warning"
-						/>
-					)}
-					{searching ? (
-						<StatusMessage
-							message={`${filteredRows.length} de ${data.rows.length} filas`}
-							tone="info"
-						/>
-					) : (
-						<StatusMessage
-							message={countMessage(data.rows.length, data.headers.length)}
-							tone="info"
-						/>
-					)}
-					{filteredRows.length > 0 ? (
-						<PaginatedDataTable
-							data={{
-								headers: data.headers,
-								rows: filteredRows,
-								warnings: data.warnings,
-							}}
-						/>
-					) : (
-						<StatusMessage message="Sin resultados" tone="info" />
-					)}
-				</>
-			)}
-		</>
+		<div className="flex h-dvh flex-col">
+			<main className="min-h-0 flex-1 overflow-y-auto">
+				<FileSelector onFileSelected={handleFileSelected} />
+				{status.kind === "loading" && (
+					<StatusMessage message="Cargando archivo…" tone="info" />
+				)}
+				{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
+				{data && (
+					<>
+						<SearchBar onChange={setQuery} value={query} />
+						{hasWarnings && (
+							<StatusMessage
+								message="El archivo tiene un formato CSV irregular: se han aplicado correcciones automáticas que pueden no coincidir con los datos originales"
+								tone="warning"
+							/>
+						)}
+						{searching ? (
+							<StatusMessage
+								message={`${filteredRows.length} de ${data.rows.length} filas`}
+								tone="info"
+							/>
+						) : (
+							<StatusMessage
+								message={countMessage(data.rows.length, data.headers.length)}
+								tone="info"
+							/>
+						)}
+						{filteredRows.length > 0 ? (
+							<PaginatedDataTable
+								data={{
+									headers: data.headers,
+									rows: filteredRows,
+									warnings: data.warnings,
+								}}
+							/>
+						) : (
+							<StatusMessage message="Sin resultados" tone="info" />
+						)}
+					</>
+				)}
+			</main>
+		</div>
 	);
 }
 
