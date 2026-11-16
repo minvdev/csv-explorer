@@ -1,9 +1,7 @@
 import { useMemo, useState } from "react";
 
 import StatusMessage from "@components/StatusMessage";
-import OpenFileButton from "@components/toolbar/OpenFileButton";
-import SearchField from "@components/toolbar/SearchField";
-import FileSelector from "@features/csv/FileSelector";
+import Toolbar from "@components/toolbar/Toolbar";
 import filterRows from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
@@ -19,10 +17,6 @@ type LoadStatus =
 	| { kind: "loading" }
 	| { kind: "error"; message: string }
 	| { kind: "success"; data: CsvData; fileName: string };
-
-function countMessage(rows: number, columns: number): string {
-	return `${rows} ${rows === 1 ? "fila" : "filas"}, ${columns} ${columns === 1 ? "columna" : "columnas"}`;
-}
 
 function App() {
 	const [status, setStatus] = useState<LoadStatus>({ kind: "idle" });
@@ -52,38 +46,32 @@ function App() {
 	};
 
 	const data = status.kind === "success" ? status.data : null;
+	const fileName = status.kind === "success" ? status.fileName : null;
 	const filteredRows = useMemo(() => (data ? filterRows(data.rows, query) : []), [data, query]);
-	const searching = query.trim() !== "";
 	const hasWarnings = data !== null && data.warnings.length > 0;
 
 	return (
 		<div className="flex h-dvh flex-col">
+			<Toolbar
+				columns={data?.headers.length ?? 0}
+				fileName={fileName}
+				onFileSelected={handleFileSelected}
+				onQueryChange={setQuery}
+				query={query}
+				shownRows={data ? filteredRows.length : 0}
+				totalRows={data?.rows.length ?? 0}
+			/>
 			<main className="min-h-0 flex-1 overflow-y-auto">
-				<FileSelector onFileSelected={handleFileSelected}>
-					<OpenFileButton />
-				</FileSelector>
 				{status.kind === "loading" && (
 					<StatusMessage message="Cargando archivo…" tone="info" />
 				)}
 				{status.kind === "error" && <StatusMessage message={status.message} tone="error" />}
 				{data && (
 					<>
-						<SearchField onChange={setQuery} value={query} />
 						{hasWarnings && (
 							<StatusMessage
 								message="El archivo tiene un formato CSV irregular: se han aplicado correcciones automáticas que pueden no coincidir con los datos originales"
 								tone="warning"
-							/>
-						)}
-						{searching ? (
-							<StatusMessage
-								message={`${filteredRows.length} de ${data.rows.length} filas`}
-								tone="info"
-							/>
-						) : (
-							<StatusMessage
-								message={countMessage(data.rows.length, data.headers.length)}
-								tone="info"
 							/>
 						)}
 						{filteredRows.length > 0 ? (
