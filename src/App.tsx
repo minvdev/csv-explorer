@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import StatusMessage from "@components/StatusMessage";
+import OpenFileButton from "@components/toolbar/OpenFileButton";
 import SearchField from "@components/toolbar/SearchField";
 import FileSelector from "@features/csv/FileSelector";
 import filterRows from "@features/csv/filterRows";
@@ -58,7 +59,9 @@ function App() {
 	return (
 		<div className="flex h-dvh flex-col">
 			<main className="min-h-0 flex-1 overflow-y-auto">
-				<FileSelector onFileSelected={handleFileSelected} />
+				<FileSelector onFileSelected={handleFileSelected}>
+					<OpenFileButton />
+				</FileSelector>
 				{status.kind === "loading" && (
 					<StatusMessage message="Cargando archivo…" tone="info" />
 				)}
