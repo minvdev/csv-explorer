@@ -31,11 +31,11 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 				<tr>
 					<th
 						aria-label="Número de fila"
-						className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 font-normal"
+						className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-1 font-normal"
 					/>
 					{data.headers.map((header) => (
 						<th
-							className={`max-w-75 truncate px-2 py-0.5 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
+							className={`max-w-75 truncate px-2 py-1 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
 							key={header}
 							title={header}
 						>
