@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import filterRows, { normalizeText } from "./filterRows";
+import filterRows, { hasResults, normalizeText } from "./filterRows";
 import type { CsvRow } from "./types";
 
 const ROWS = [
@@ -53,5 +53,24 @@ describe("filterRows", () => {
 	it("no muta las filas originales", () => {
 		filterRows(ROWS, "ana");
 		expect(ROWS).toHaveLength(3);
+	});
+});
+
+describe("hasResults", () => {
+	it("devuelve true si alguna fila coincide", () => {
+		expect(hasResults(ROWS, "sevill")).toBe(true);
+	});
+
+	it("devuelve false sin coincidencias", () => {
+		expect(hasResults(ROWS, "zzz")).toBe(false);
+	});
+
+	it("devuelve true con query vacía si hay filas", () => {
+		expect(hasResults(ROWS, "")).toBe(true);
+		expect(hasResults(ROWS, "   ")).toBe(true);
+	});
+
+	it("devuelve false con query vacía si no hay filas", () => {
+		expect(hasResults([], "ana")).toBe(false);
 	});
 });
