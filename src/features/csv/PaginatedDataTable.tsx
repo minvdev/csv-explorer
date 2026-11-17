@@ -34,7 +34,7 @@ function PaginatedDataTable({ data }: PaginatedDataTableProps) {
 	const visibleRows = data.rows.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
 
 	return (
-		<>
+		<div className="flex flex-col items-start gap-2 pb-2">
 			{selectedColumn && <ColumnStats header={selectedColumn} rows={data.rows} />}
 			<DataTable
 				data={{ headers: data.headers, rows: visibleRows, warnings: data.warnings }}
@@ -42,8 +42,13 @@ function PaginatedDataTable({ data }: PaginatedDataTableProps) {
 				selectedColumn={selectedColumn}
 				startIndex={currentPage * PAGE_SIZE}
 			/>
-			<Pagination onPageChange={setPage} page={currentPage} pageCount={pageCount} />
-		</>
+			<Pagination
+				className={"ml-2"}
+				onPageChange={setPage}
+				page={currentPage}
+				pageCount={pageCount}
+			/>
+		</div>
 	);
 }
 
