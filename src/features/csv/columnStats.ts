@@ -39,4 +39,12 @@ function columnStats(rows: CsvRow[], header: string): ColumnStats {
 	return { kind: "numeric", min, max, mean: Math.round(mean * 100) / 100 };
 }
 
+export function columnStatsMessage(rows: CsvRow[], header: string): string {
+	const stats = columnStats(rows, header);
+	if (stats.kind === "non-numeric") {
+		return `«${header}»: columna sin datos numéricos`;
+	}
+	return `«${header}»: Mín ${stats.min} · Máx ${stats.max} · Media ${stats.mean}`;
+}
+
 export default columnStats;
