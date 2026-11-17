@@ -31,6 +31,7 @@ El objetivo es construir un MVP pequeño y funcional, priorizando la correción,
 - Nunca añadas dependencias sin preguntar.
 - No implementes funcionalidades que no formen parte de la tarea actual.
 - No modifiques archivos ajenos a la tarea sin razón justificada.
+- Escribe el código (identificadores y comentarios) en inglés; solo los textos visibles en la UI y los mensajes de commit van en el idioma de la aplicación.
 
 # Convención de imports
 
