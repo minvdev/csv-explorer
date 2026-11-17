@@ -17,9 +17,9 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 		const isFirstRow = index === 0;
 		const isLastRow = index === data.rows.length - 1;
 		return [
-			"border-gray-300 bg-orange-100 border-l-2 border-r-2 border-l-orange-400 border-r-orange-400",
-			isFirstRow ? "border-t-2 border-t-orange-400" : "",
-			isLastRow ? "border-b-2 border-b-orange-400" : "",
+			"border-gray-300 bg-orange-100 border-l-orange-400 border-r-orange-400",
+			isFirstRow ? "border-t-orange-400" : "",
+			isLastRow ? "border-b-orange-400" : "",
 		]
 			.filter(Boolean)
 			.join(" ");
@@ -35,7 +35,7 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 					/>
 					{data.headers.map((header) => (
 						<th
-							className={`max-w-75 truncate px-2 py-0.5 font-normal border border-gray-300 ${isSelected(header) ? "bg-orange-300" : "bg-gray-50"}`}
+							className={`max-w-75 truncate px-2 py-0.5 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
 							key={header}
 							title={header}
 						>
@@ -53,12 +53,13 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 			<tbody>
 				{data.rows.map((row, index) => (
 					<tr key={index}>
-						<td className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 text-center">
+						<td className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 text-center has-[+_[data-col-selected]]:border-r-orange-400">
 							{startIndex + index + 1}
 						</td>
 						{data.headers.map((header) => (
 							<td
-								className={`max-w-75 truncate border px-2 py-0.5 ${bodyCellTone(header, index)}`}
+								className={`max-w-75 truncate border px-2 py-0.5 has-[+_[data-col-selected]]:border-r-orange-400 ${bodyCellTone(header, index)}`}
+								data-col-selected={isSelected(header) ? "" : undefined}
 								key={header}
 								title={row[header]}
 							>
