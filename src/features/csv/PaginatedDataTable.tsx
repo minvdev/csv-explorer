@@ -40,6 +40,7 @@ function PaginatedDataTable({ data }: PaginatedDataTableProps) {
 				data={{ headers: data.headers, rows: visibleRows, warnings: data.warnings }}
 				onSelectColumn={handleSelectColumn}
 				selectedColumn={selectedColumn}
+				startIndex={currentPage * PAGE_SIZE}
 			/>
 			<Pagination onPageChange={setPage} page={currentPage} pageCount={pageCount} />
 		</>
