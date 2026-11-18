@@ -11,6 +11,7 @@ interface ToolbarProps {
 	shownRows: number;
 	totalRows: number;
 	columns: number;
+	isLoading: boolean;
 	query: string;
 	onQueryChange: (query: string) => void;
 	onFileSelected: (file: File) => void;
@@ -21,6 +22,7 @@ function Toolbar({
 	shownRows,
 	totalRows,
 	columns,
+	isLoading,
 	query,
 	onQueryChange,
 	onFileSelected,
@@ -42,8 +44,8 @@ function Toolbar({
 			)}
 			<div className="flex-1" />
 			<SearchField onChange={onQueryChange} value={query} />
-			<FileSelector onFileSelected={onFileSelected}>
-				<OpenFileButton />
+			<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
+				<OpenFileButton disabled={isLoading} />
 			</FileSelector>
 		</header>
 	);

@@ -36,6 +36,7 @@ function Explorer() {
 	const { clearStatuses, removeStatus, showStatus } = useStatus();
 	const [loaded, setLoaded] = useState<LoadedFile | null>(null);
 	const [query, setQuery] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 	const [selectedColumn, setSelectedColumn] = useState<{
 		column: string;
 		statusId: StatusId;
@@ -53,6 +54,7 @@ function Explorer() {
 		setQuery("");
 		clearStatuses();
 		noResultsIdRef.current = null;
+		setIsLoading(true);
 		const loadingId = showStatus("Cargando archivo…", "info");
 
 		try {
@@ -71,6 +73,7 @@ function Explorer() {
 			);
 		} finally {
 			removeStatus(loadingId);
+			setIsLoading(false);
 		}
 	};
 
@@ -107,6 +110,7 @@ function Explorer() {
 				onFileSelected={handleFileSelected}
 				onQueryChange={handleQueryChange}
 				query={query}
+				isLoading={isLoading}
 				shownRows={loaded ? filteredRows.length : 0}
 				totalRows={loaded?.data.rows.length ?? 0}
 			/>

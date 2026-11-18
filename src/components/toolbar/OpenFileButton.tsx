@@ -1,7 +1,15 @@
-import { buttonTone } from "@components/ui";
+import { buttonTone, buttonToneDisabled } from "@components/ui";
 
-function OpenFileButton() {
-	return <span className={buttonTone}>Abrir archivo</span>;
+interface OpenFileButtonProps {
+	disabled?: boolean;
+}
+
+function OpenFileButton({ disabled = false }: OpenFileButtonProps) {
+	return (
+		<span aria-disabled={disabled} className={disabled ? buttonToneDisabled : buttonTone}>
+			Abrir archivo
+		</span>
+	);
 }
 
 export default OpenFileButton;

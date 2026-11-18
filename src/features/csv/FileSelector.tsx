@@ -2,10 +2,11 @@ import type { ReactNode } from "react";
 
 interface FileSelectorProps {
 	onFileSelected: (file: File) => void;
+	disabled?: boolean;
 	children: ReactNode;
 }
 
-function FileSelector({ onFileSelected, children }: FileSelectorProps) {
+function FileSelector({ onFileSelected, disabled = false, children }: FileSelectorProps) {
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (file) {
@@ -14,8 +15,14 @@ function FileSelector({ onFileSelected, children }: FileSelectorProps) {
 	};
 
 	return (
-		<label>
-			<input accept=".csv,text/csv" className="sr-only" type="file" onChange={handleChange} />
+		<label className={disabled ? "cursor-not-allowed" : undefined}>
+			<input
+				accept=".csv,text/csv"
+				className="sr-only"
+				disabled={disabled}
+				type="file"
+				onChange={handleChange}
+			/>
 			{children}
 		</label>
 	);
