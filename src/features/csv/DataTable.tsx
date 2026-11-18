@@ -1,13 +1,14 @@
-import type { CsvData } from "./types";
+import type { CsvRow } from "./types";
 
 interface DataTableProps {
-	data: CsvData;
+	headers: string[];
+	rows: CsvRow[];
 	startIndex: number;
 	selectedColumn: string | null;
 	onSelectColumn: (column: string) => void;
 }
 
-function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTableProps) {
+function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }: DataTableProps) {
 	const isSelected = (header: string) => header === selectedColumn;
 
 	const bodyCellTone = (header: string, index: number) => {
@@ -15,7 +16,7 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 			return "border-gray-300 bg-white";
 		}
 		const isFirstRow = index === 0;
-		const isLastRow = index === data.rows.length - 1;
+		const isLastRow = index === rows.length - 1;
 		return [
 			"border-gray-300 bg-orange-100 border-l-orange-400 border-r-orange-400",
 			isFirstRow ? "border-t-orange-400" : "",
@@ -33,7 +34,7 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 						aria-label="Número de fila"
 						className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-1 font-normal"
 					/>
-					{data.headers.map((header) => (
+					{headers.map((header) => (
 						<th
 							className={`max-w-75 truncate px-2 py-1 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
 							key={header}
@@ -51,12 +52,12 @@ function DataTable({ data, startIndex, selectedColumn, onSelectColumn }: DataTab
 				</tr>
 			</thead>
 			<tbody>
-				{data.rows.map((row, index) => (
+				{rows.map((row, index) => (
 					<tr key={index}>
 						<td className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 text-center has-[+_[data-col-selected]]:border-r-orange-400">
 							{startIndex + index + 1}
 						</td>
-						{data.headers.map((header) => (
+						{headers.map((header) => (
 							<td
 								className={`max-w-75 truncate border px-2 py-0.5 has-[+_[data-col-selected]]:border-r-orange-400 ${bodyCellTone(header, index)}`}
 								data-col-selected={isSelected(header) ? "" : undefined}

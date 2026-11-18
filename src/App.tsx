@@ -118,12 +118,9 @@ function Explorer() {
 			<main className="min-h-0 flex-1 overflow-y-auto">
 				{loaded && filteredRows.length > 0 && (
 					<PaginatedDataTable
-						data={{
-							headers: loaded.data.headers,
-							rows: filteredRows,
-							warnings: loaded.data.warnings,
-						}}
+						headers={loaded.data.headers}
 						onSelectColumn={handleSelectColumn}
+						rows={filteredRows}
 						selectedColumn={selectedColumn?.column ?? null}
 					/>
 				)}
