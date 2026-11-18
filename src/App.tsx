@@ -49,19 +49,19 @@ function Explorer() {
 
 	const handleFileSelected = async (file: File) => {
 		setSelectedColumn(null);
+		setLoaded(null);
 		setQuery("");
 		clearStatuses();
+		noResultsIdRef.current = null;
 		const loadingId = showStatus("Cargando archivo…", "info");
 
 		try {
 			const parsed = await parseCsv(await file.text());
-			removeStatus(loadingId);
 			setLoaded({ data: parsed, fileName: file.name });
 			if (parsed.warnings.length > 0) {
 				showStatus(WARNING_MESSAGE, "warning");
 			}
 		} catch (caught) {
-			removeStatus(loadingId);
 			setLoaded(null);
 			showStatus(
 				caught instanceof CsvParseError
@@ -69,6 +69,8 @@ function Explorer() {
 					: "No se ha podido cargar el archivo",
 				"error",
 			);
+		} finally {
+			removeStatus(loadingId);
 		}
 	};
 
