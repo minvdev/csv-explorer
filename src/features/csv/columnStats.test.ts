@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import columnStats, { columnStatsMessage, normalizeNumber } from "./columnStats";
+import columnStats, { normalizeNumber } from "./columnStats";
 import type { CsvRow } from "./types";
 
 describe("normalizeNumber", () => {
@@ -73,17 +73,5 @@ describe("columnStats", () => {
 	it("marca como no numérica una columna sin valores", () => {
 		const emptyRows = [{ v: "" }, {}] as CsvRow[];
 		expect(columnStats(emptyRows, "v")).toEqual({ kind: "non-numeric" });
-	});
-});
-
-describe("columnStatsMessage", () => {
-	it("devuelve el mensaje con mínimo, máximo y media de una columna numérica", () => {
-		const rows = [{ edad: "30" }, { edad: "10" }, { edad: "20" }];
-		expect(columnStatsMessage(rows, "edad")).toBe("«edad»: Mín 10 · Máx 30 · Media 20");
-	});
-
-	it("devuelve el mensaje de columna sin datos numéricos", () => {
-		const rows = [{ v: "10" }, { v: "abc" }];
-		expect(columnStatsMessage(rows, "v")).toBe("«v»: columna sin datos numéricos");
 	});
 });

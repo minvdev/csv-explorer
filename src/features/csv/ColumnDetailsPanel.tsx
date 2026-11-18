@@ -1,0 +1,63 @@
+import { useMemo } from "react";
+
+import columnStats from "./columnStats";
+import type { CsvRow } from "./types";
+
+interface ColumnDetailsPanelProps {
+	column: string;
+	rows: CsvRow[];
+	onClose: () => void;
+}
+
+const LABEL_TONE = "text-xs uppercase tracking-wide text-gray-500";
+const VALUE_TONE = "font-mono text-sm text-gray-900";
+
+function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) {
+	const stats = useMemo(() => columnStats(rows, column), [rows, column]);
+
+	return (
+		<aside
+			aria-label={`Detalles de la columna ${column}`}
+			className="flex w-72 shrink-0 flex-col overflow-y-auto border-l border-orange-100 bg-white text-sm"
+		>
+			<div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-orange-100 bg-orange-50 px-4">
+				<h2 className="min-w-0 truncate font-semibold text-gray-700" title={column}>
+					{column}
+				</h2>
+				<button
+					aria-label="Cerrar detalles"
+					className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded text-lg text-gray-500 hover:bg-orange-100 hover:text-orange-700"
+					onClick={onClose}
+					type="button"
+				>
+					×
+				</button>
+			</div>
+			<div className="flex flex-col gap-4 p-4">
+				<p className="text-xs text-gray-500">
+					{rows.length} fila{rows.length > 1 && "s"} visibles
+				</p>
+				{stats.kind === "numeric" ? (
+					<dl className="flex flex-col gap-3">
+						<div className="flex flex-col gap-0.5">
+							<dt className={LABEL_TONE}>Mínimo</dt>
+							<dd className={VALUE_TONE}>{stats.min}</dd>
+						</div>
+						<div className="flex flex-col gap-0.5">
+							<dt className={LABEL_TONE}>Máximo</dt>
+							<dd className={VALUE_TONE}>{stats.max}</dd>
+						</div>
+						<div className="flex flex-col gap-0.5">
+							<dt className={LABEL_TONE}>Media</dt>
+							<dd className={VALUE_TONE}>{stats.mean}</dd>
+						</div>
+					</dl>
+				) : (
+					<p className="text-gray-600">Esta columna no tiene datos numéricos</p>
+				)}
+			</div>
+		</aside>
+	);
+}
+
+export default ColumnDetailsPanel;

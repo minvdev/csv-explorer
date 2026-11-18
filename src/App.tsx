@@ -5,7 +5,7 @@ import type { StatusId } from "@components/status/StatusContext";
 import StatusProvider from "@components/status/StatusProvider";
 import { useStatus } from "@components/status/useStatus";
 import Toolbar from "@components/toolbar/Toolbar";
-import { columnStatsMessage } from "@features/csv/columnStats";
+import ColumnDetailsPanel from "@features/csv/ColumnDetailsPanel";
 import filterRows, { hasResults } from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
@@ -37,10 +37,7 @@ function Explorer() {
 	const [loaded, setLoaded] = useState<LoadedFile | null>(null);
 	const [query, setQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [selectedColumn, setSelectedColumn] = useState<{
-		column: string;
-		statusId: StatusId;
-	} | null>(null);
+	const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 	const noResultsIdRef = useRef<StatusId | null>(null);
 
 	const filteredRows = useMemo(
@@ -89,17 +86,7 @@ function Explorer() {
 	};
 
 	const handleSelectColumn = (column: string) => {
-		if (selectedColumn !== null) {
-			removeStatus(selectedColumn.statusId);
-		}
-		if (selectedColumn?.column === column) {
-			setSelectedColumn(null);
-			return;
-		}
-		setSelectedColumn({
-			column,
-			statusId: showStatus(columnStatsMessage(loaded?.data.rows ?? [], column), "info"),
-		});
+		setSelectedColumn(selectedColumn === column ? null : column);
 	};
 
 	return (
@@ -114,17 +101,28 @@ function Explorer() {
 				shownRows={loaded ? filteredRows.length : 0}
 				totalRows={loaded?.data.rows.length ?? 0}
 			/>
-			<StatusBar />
-			<main className="min-h-0 flex-1 overflow-y-auto">
-				{loaded && filteredRows.length > 0 && (
-					<PaginatedDataTable
-						headers={loaded.data.headers}
-						onSelectColumn={handleSelectColumn}
+			<div className="flex min-h-0 flex-1">
+				<div className="flex min-w-0 flex-1 flex-col">
+					<StatusBar />
+					<main className="min-h-0 flex-1 overflow-y-auto">
+						{loaded && filteredRows.length > 0 && (
+							<PaginatedDataTable
+								headers={loaded.data.headers}
+								onSelectColumn={handleSelectColumn}
+								rows={filteredRows}
+								selectedColumn={selectedColumn}
+							/>
+						)}
+					</main>
+				</div>
+				{loaded && selectedColumn !== null && (
+					<ColumnDetailsPanel
+						column={selectedColumn}
+						onClose={() => setSelectedColumn(null)}
 						rows={filteredRows}
-						selectedColumn={selectedColumn?.column ?? null}
 					/>
 				)}
-			</main>
+			</div>
 		</div>
 	);
 }
