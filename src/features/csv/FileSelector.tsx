@@ -9,6 +9,7 @@ interface FileSelectorProps {
 function FileSelector({ onFileSelected, disabled = false, children }: FileSelectorProps) {
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
+		event.target.value = "";
 		if (file) {
 			onFileSelected(file);
 		}
