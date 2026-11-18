@@ -15,10 +15,10 @@ interface PaginatedDataTableProps {
 
 function PaginatedDataTable({ data, selectedColumn, onSelectColumn }: PaginatedDataTableProps) {
 	const [page, setPage] = useState(0);
-	const [lastData, setLastData] = useState(data);
+	const [lastRows, setLastRows] = useState(data.rows);
 
-	if (data !== lastData) {
-		setLastData(data);
+	if (data.rows !== lastRows) {
+		setLastRows(data.rows);
 		setPage(0);
 	}
 
