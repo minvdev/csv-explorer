@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import type { CsvRow } from "./types";
 
 interface DataTableProps {
@@ -10,6 +12,10 @@ interface DataTableProps {
 
 function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }: DataTableProps) {
 	const isSelected = (header: string) => header === selectedColumn;
+
+	const scrollSelectedHeaderIntoView = useCallback((node: HTMLTableCellElement | null) => {
+		node?.scrollIntoView({ block: "nearest", inline: "nearest" });
+	}, []);
 
 	const bodyCellTone = (header: string, index: number) => {
 		if (!isSelected(header)) {
@@ -38,6 +44,7 @@ function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }
 						<th
 							className={`max-w-75 truncate px-2 py-1 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
 							key={header}
+							ref={isSelected(header) ? scrollSelectedHeaderIntoView : undefined}
 							title={header}
 						>
 							<button
