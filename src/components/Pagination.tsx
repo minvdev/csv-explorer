@@ -8,11 +8,14 @@ interface PaginationProps {
 }
 
 function Pagination({ page, pageCount, onPageChange, className }: PaginationProps) {
+	const isFirstPage = page === 0;
+	const isLastPage = page === pageCount - 1;
+
 	return (
 		<div className={`flex items-center gap-3 ${className}`}>
 			<button
-				className={buttonTone}
-				disabled={page === 0}
+				className={`${buttonTone} ${isFirstPage ? "select-none" : ""}`}
+				disabled={isFirstPage}
 				onClick={() => onPageChange(page - 1)}
 				type="button"
 			>
@@ -22,8 +25,8 @@ function Pagination({ page, pageCount, onPageChange, className }: PaginationProp
 				Página {page + 1} de {pageCount}
 			</span>
 			<button
-				className={buttonTone}
-				disabled={page === pageCount - 1}
+				className={`${buttonTone} ${isLastPage ? "select-none" : ""}`}
+				disabled={isLastPage}
 				onClick={() => onPageChange(page + 1)}
 				type="button"
 			>
