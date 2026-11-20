@@ -33,26 +33,29 @@ function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }
 	};
 
 	return (
-		<table className="border-collapse border-gray-300 text-xs">
+		<table className="w-full border-collapse border-gray-300 text-xs">
+			<colgroup>
+				<col className="w-12" />
+			</colgroup>
 			<thead>
 				<tr>
 					<th
 						aria-label="Número de fila"
-						className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-1 font-normal"
+						className="w-12 border border-gray-300 bg-gray-50 px-2 py-1 font-normal"
 					/>
 					{headers.map((header) => (
 						<th
-							className={`max-w-75 truncate px-2 py-1 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
+							className={`px-2 py-1 font-normal ${isSelected(header) ? "bg-orange-300" : "border border-gray-300 bg-gray-50"}`}
 							key={header}
 							ref={isSelected(header) ? scrollSelectedHeaderIntoView : undefined}
 							title={header}
 						>
 							<button
-								className="w-full cursor-pointer truncate hover:underline hover:decoration-current"
+								className="w-full cursor-pointer hover:underline hover:decoration-current"
 								type="button"
 								onClick={() => onSelectColumn(header)}
 							>
-								{header}
+								<span className="block max-w-75 truncate">{header}</span>
 							</button>
 						</th>
 					))}
@@ -61,17 +64,17 @@ function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }
 			<tbody>
 				{rows.map((row, index) => (
 					<tr key={index}>
-						<td className="min-w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 text-center has-[+_[data-col-selected]]:border-r-orange-400">
+						<td className="w-12 border border-gray-300 bg-gray-50 px-2 py-0.5 text-center has-[+_[data-col-selected]]:border-r-orange-400">
 							{startIndex + index + 1}
 						</td>
 						{headers.map((header) => (
 							<td
-								className={`max-w-75 truncate border px-2 py-0.5 has-[+_[data-col-selected]]:border-r-orange-400 ${bodyCellTone(header, index)}`}
+								className={`border px-2 py-0.5 has-[+_[data-col-selected]]:border-r-orange-400 ${bodyCellTone(header, index)}`}
 								data-col-selected={isSelected(header) ? "" : undefined}
 								key={header}
 								title={row[header]}
 							>
-								{row[header]}
+								<div className="max-w-75 truncate">{row[header]}</div>
 							</td>
 						))}
 					</tr>

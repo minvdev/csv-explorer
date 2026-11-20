@@ -33,7 +33,7 @@ function PaginatedDataTable({
 	const visibleRows = rows.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
 
 	return (
-		<div className="flex flex-col items-start gap-2 pb-2">
+		<div className="flex w-full flex-col items-start gap-2 pb-2">
 			<DataTable
 				headers={headers}
 				onSelectColumn={onSelectColumn}
