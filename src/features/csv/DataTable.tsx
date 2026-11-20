@@ -48,7 +48,7 @@ function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }
 							title={header}
 						>
 							<button
-								className="w-full cursor-pointer truncate"
+								className="w-full cursor-pointer truncate hover:underline hover:decoration-current"
 								type="button"
 								onClick={() => onSelectColumn(header)}
 							>
