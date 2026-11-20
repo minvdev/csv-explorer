@@ -6,10 +6,10 @@ function StatusProvider({ children }: { children: ReactNode }) {
 	const [statuses, setStatuses] = useState<StatusEntry[]>([]);
 	const nextIdRef = useRef(0);
 
-	const showStatus = (message: string, tone: StatusEntry["tone"]) => {
+	const showStatus = (message: string, tone: StatusEntry["tone"], dismissible = false) => {
 		const id = nextIdRef.current;
 		nextIdRef.current += 1;
-		setStatuses((current) => [...current, { id, message, tone }]);
+		setStatuses((current) => [...current, { dismissible, id, message, tone }]);
 		return id;
 	};
 

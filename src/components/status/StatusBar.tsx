@@ -16,7 +16,7 @@ const ROLE_BY_TONE: Record<StatusTone, string> = {
 };
 
 function StatusBar() {
-	const { statuses } = useStatus();
+	const { removeStatus, statuses } = useStatus();
 
 	if (statuses.length === 0) {
 		return null;
@@ -31,6 +31,16 @@ function StatusBar() {
 					role={ROLE_BY_TONE[status.tone]}
 				>
 					{status.message}
+					{status.dismissible && (
+						<button
+							aria-label="Cerrar mensaje"
+							className="ml-auto cursor-pointer rounded px-1 text-base leading-none hover:bg-black/10"
+							type="button"
+							onClick={() => removeStatus(status.id)}
+						>
+							×
+						</button>
+					)}
 				</p>
 			))}
 		</>

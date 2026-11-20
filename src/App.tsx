@@ -58,7 +58,7 @@ function Explorer() {
 			const parsed = await parseCsv(await file.text());
 			setLoaded({ data: parsed, fileName: file.name });
 			if (parsed.warnings.length > 0) {
-				showStatus(WARNING_MESSAGE, "warning");
+				showStatus(WARNING_MESSAGE, "warning", true);
 			}
 		} catch (caught) {
 			setLoaded(null);
@@ -67,6 +67,7 @@ function Explorer() {
 					? ERROR_MESSAGES[caught.kind]
 					: "No se ha podido cargar el archivo",
 				"error",
+				true,
 			);
 		} finally {
 			removeStatus(loadingId);

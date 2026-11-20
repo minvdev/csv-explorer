@@ -8,11 +8,12 @@ export interface StatusEntry {
 	id: StatusId;
 	message: string;
 	tone: StatusTone;
+	dismissible: boolean;
 }
 
 export interface StatusContextValue {
 	statuses: StatusEntry[];
-	showStatus: (message: string, tone: StatusTone) => StatusId;
+	showStatus: (message: string, tone: StatusTone, dismissible?: boolean) => StatusId;
 	removeStatus: (id: StatusId) => void;
 	clearStatuses: () => void;
 }
