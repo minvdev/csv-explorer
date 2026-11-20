@@ -10,6 +10,7 @@ import filterRows, { hasResults } from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
 import type { CsvData } from "@features/csv/types";
+import EmptyState from "@features/empty-state/EmptyState";
 
 const ERROR_MESSAGES: Record<CsvParseError["kind"], string> = {
 	empty: "El archivo está vacío o no contiene datos",
@@ -106,6 +107,9 @@ function Explorer() {
 				<div className="flex min-w-0 flex-1 flex-col">
 					<StatusBar />
 					<main className="min-h-0 flex-1 overflow-y-auto">
+						{loaded === null && (
+							<EmptyState isLoading={isLoading} onFileSelected={handleFileSelected} />
+						)}
 						{loaded && filteredRows.length > 0 && (
 							<PaginatedDataTable
 								headers={loaded.data.headers}

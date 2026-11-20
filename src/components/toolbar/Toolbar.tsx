@@ -43,7 +43,7 @@ function Toolbar({
 				</>
 			)}
 			<div className="flex-1" />
-			<SearchField onChange={onQueryChange} value={query} />
+			{fileName && <SearchField onChange={onQueryChange} value={query} />}
 			<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
 				<OpenFileButton disabled={isLoading} />
 			</FileSelector>
