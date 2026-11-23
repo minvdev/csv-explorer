@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import columnStats from "./columnStats";
 import type { CsvRow } from "./types";
@@ -11,14 +11,21 @@ interface ColumnDetailsPanelProps {
 
 const LABEL_TONE = "text-xs uppercase tracking-wide text-gray-500";
 const VALUE_TONE = "font-mono text-sm text-gray-900";
+export const COLUMN_DETAILS_PANEL_ID = "column-details-panel";
 
 function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) {
 	const stats = useMemo(() => columnStats(rows, column), [rows, column]);
+	const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+	useEffect(() => {
+		closeButtonRef.current?.focus();
+	}, [column]);
 
 	return (
 		<aside
 			aria-label={`Detalles de la columna ${column}`}
 			className="flex w-72 shrink-0 flex-col overflow-y-auto border-l border-orange-100 bg-white text-sm"
+			id={COLUMN_DETAILS_PANEL_ID}
 		>
 			<div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-orange-100 bg-orange-50 px-4">
 				<h2 className="min-w-0 truncate font-semibold text-gray-700" title={column}>
@@ -28,6 +35,7 @@ function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) 
 					aria-label="Cerrar detalles"
 					className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded text-lg text-gray-500 hover:bg-orange-100 hover:text-orange-700"
 					onClick={onClose}
+					ref={closeButtonRef}
 					type="button"
 				>
 					×

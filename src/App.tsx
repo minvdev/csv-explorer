@@ -40,6 +40,7 @@ function Explorer() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 	const noResultsIdRef = useRef<StatusId | null>(null);
+	const selectedColumnTriggerRef = useRef<HTMLButtonElement | null>(null);
 
 	const filteredRows = useMemo(
 		() => (loaded ? filterRows(loaded.data.rows, query) : []),
@@ -87,8 +88,14 @@ function Explorer() {
 		}
 	};
 
-	const handleSelectColumn = (column: string) => {
+	const handleSelectColumn = (column: string, trigger: HTMLButtonElement) => {
+		selectedColumnTriggerRef.current = trigger;
 		setSelectedColumn(selectedColumn === column ? null : column);
+	};
+
+	const handleCloseColumnDetails = () => {
+		setSelectedColumn(null);
+		selectedColumnTriggerRef.current?.focus();
 	};
 
 	return (
@@ -123,7 +130,7 @@ function Explorer() {
 				{loaded && selectedColumn !== null && (
 					<ColumnDetailsPanel
 						column={selectedColumn}
-						onClose={() => setSelectedColumn(null)}
+						onClose={handleCloseColumnDetails}
 						rows={filteredRows}
 					/>
 				)}

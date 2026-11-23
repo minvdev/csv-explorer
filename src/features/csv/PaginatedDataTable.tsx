@@ -11,7 +11,7 @@ interface PaginatedDataTableProps {
 	headers: string[];
 	rows: CsvRow[];
 	selectedColumn: string | null;
-	onSelectColumn: (column: string) => void;
+	onSelectColumn: (column: string, trigger: HTMLButtonElement) => void;
 }
 
 function PaginatedDataTable({

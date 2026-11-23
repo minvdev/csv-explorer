@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 
+import { COLUMN_DETAILS_PANEL_ID } from "./ColumnDetailsPanel";
 import type { CsvRow } from "./types";
 
 interface DataTableProps {
@@ -7,7 +8,7 @@ interface DataTableProps {
 	rows: CsvRow[];
 	startIndex: number;
 	selectedColumn: string | null;
-	onSelectColumn: (column: string) => void;
+	onSelectColumn: (column: string, trigger: HTMLButtonElement) => void;
 }
 
 function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }: DataTableProps) {
@@ -51,9 +52,11 @@ function DataTable({ headers, rows, startIndex, selectedColumn, onSelectColumn }
 							title={header}
 						>
 							<button
+								aria-controls={COLUMN_DETAILS_PANEL_ID}
+								aria-expanded={isSelected(header)}
 								className="w-full cursor-pointer hover:underline hover:decoration-current"
 								type="button"
-								onClick={() => onSelectColumn(header)}
+								onClick={(event) => onSelectColumn(header, event.currentTarget)}
 							>
 								<span className="block max-w-75 truncate">{header}</span>
 							</button>
