@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import type { StatusTone } from "./StatusContext";
 import { useStatus } from "./useStatus";
 
@@ -9,27 +11,44 @@ const CLASS_BY_TONE: Record<StatusTone, string> = {
 	error: "bg-red-100 text-red-700",
 };
 
-const ROLE_BY_TONE: Record<StatusTone, string> = {
-	info: "status",
-	warning: "status",
-	error: "alert",
-};
+function Announcement({ message }: { message: string }) {
+	const [ready, setReady] = useState(false);
+
+	useEffect(() => {
+		// Let the file dialog release focus before publishing its result.
+		const timer = window.setTimeout(() => setReady(true), 150);
+		return () => window.clearTimeout(timer);
+	}, []);
+
+	return ready ? <p>{message}</p> : null;
+}
 
 function StatusBar() {
 	const { removeStatus, statuses } = useStatus();
 
-	if (statuses.length === 0) {
-		return null;
-	}
-
 	return (
 		<>
+			<div
+				aria-atomic="false"
+				aria-live="polite"
+				aria-relevant="additions"
+				className="sr-only"
+			>
+				{statuses
+					.filter((status) => status.tone !== "error")
+					.map((status) => (
+						<Announcement key={status.id} message={status.message} />
+					))}
+			</div>
+			<div role="alert" aria-atomic="false" aria-relevant="additions" className="sr-only">
+				{statuses
+					.filter((status) => status.tone === "error")
+					.map((status) => (
+						<Announcement key={status.id} message={status.message} />
+					))}
+			</div>
 			{statuses.map((status) => (
-				<p
-					className={`${BAND_TONE} ${CLASS_BY_TONE[status.tone]}`}
-					key={status.id}
-					role={ROLE_BY_TONE[status.tone]}
-				>
+				<p className={`${BAND_TONE} ${CLASS_BY_TONE[status.tone]}`} key={status.id}>
 					{status.message}
 					{status.dismissible && (
 						<button
