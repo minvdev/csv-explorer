@@ -25,11 +25,13 @@ function EmptyState({ isLoading, onFileSelected }: EmptyStateProps) {
 						Carga un CSV para consultar sus filas, aplicar filtros y conocer cada una de
 						sus columnas.
 					</p>
-					<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
-						<span className={`mt-7 ${isLoading ? buttonToneDisabled : buttonTone}`}>
-							Abrir archivo CSV
-						</span>
-					</FileSelector>
+					<div className="mt-7">
+						<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
+							<span className={isLoading ? buttonToneDisabled : buttonTone}>
+								Abrir archivo CSV
+							</span>
+						</FileSelector>
+					</div>
 				</div>
 				<div
 					aria-hidden="true"

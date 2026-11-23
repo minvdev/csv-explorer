@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 interface FileSelectorProps {
 	onFileSelected: (file: File) => void;
@@ -7,6 +7,8 @@ interface FileSelectorProps {
 }
 
 function FileSelector({ onFileSelected, disabled = false, children }: FileSelectorProps) {
+	const inputRef = useRef<HTMLInputElement>(null);
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		event.target.value = "";
@@ -16,16 +18,26 @@ function FileSelector({ onFileSelected, disabled = false, children }: FileSelect
 	};
 
 	return (
-		<label className={disabled ? "cursor-not-allowed" : undefined}>
+		<>
 			<input
 				accept=".csv,text/csv"
+				aria-hidden="true"
 				className="sr-only"
 				disabled={disabled}
+				ref={inputRef}
+				tabIndex={-1}
 				type="file"
 				onChange={handleChange}
 			/>
-			{children}
-		</label>
+			<button
+				className="rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+				disabled={disabled}
+				type="button"
+				onClick={() => inputRef.current?.click()}
+			>
+				{children}
+			</button>
+		</>
 	);
 }
 
