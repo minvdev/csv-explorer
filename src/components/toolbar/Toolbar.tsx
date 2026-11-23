@@ -1,3 +1,5 @@
+import type { Ref } from "react";
+
 import FileSelector from "@features/csv/FileSelector";
 
 import Brand from "./Brand";
@@ -13,6 +15,7 @@ interface ToolbarProps {
 	columns: number;
 	isLoading: boolean;
 	query: string;
+	searchInputRef: Ref<HTMLInputElement>;
 	onQueryChange: (query: string) => void;
 	onFileSelected: (file: File) => void;
 }
@@ -24,6 +27,7 @@ function Toolbar({
 	columns,
 	isLoading,
 	query,
+	searchInputRef,
 	onQueryChange,
 	onFileSelected,
 }: ToolbarProps) {
@@ -43,7 +47,9 @@ function Toolbar({
 				</>
 			)}
 			<div className="flex-1" />
-			{fileName && <SearchField onChange={onQueryChange} value={query} />}
+			{fileName && (
+				<SearchField onChange={onQueryChange} ref={searchInputRef} value={query} />
+			)}
 			<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
 				<OpenFileButton disabled={isLoading} />
 			</FileSelector>

@@ -41,6 +41,7 @@ function Explorer() {
 	const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 	const noResultsIdRef = useRef<StatusId | null>(null);
 	const selectedColumnTriggerRef = useRef<HTMLButtonElement | null>(null);
+	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	const filteredRows = useMemo(
 		() => (loaded ? filterRows(loaded.data.rows, query) : []),
@@ -95,7 +96,11 @@ function Explorer() {
 
 	const handleCloseColumnDetails = () => {
 		setSelectedColumn(null);
-		selectedColumnTriggerRef.current?.focus();
+		if (selectedColumnTriggerRef.current?.isConnected) {
+			selectedColumnTriggerRef.current.focus();
+		} else {
+			searchInputRef.current?.focus();
+		}
 	};
 
 	return (
@@ -106,6 +111,7 @@ function Explorer() {
 				onFileSelected={handleFileSelected}
 				onQueryChange={handleQueryChange}
 				query={query}
+				searchInputRef={searchInputRef}
 				isLoading={isLoading}
 				shownRows={loaded ? filteredRows.length : 0}
 				totalRows={loaded?.data.rows.length ?? 0}
