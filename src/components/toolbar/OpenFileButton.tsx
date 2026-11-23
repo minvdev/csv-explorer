@@ -5,11 +5,7 @@ interface OpenFileButtonProps {
 }
 
 function OpenFileButton({ disabled = false }: OpenFileButtonProps) {
-	return (
-		<span aria-disabled={disabled} className={disabled ? buttonToneDisabled : buttonTone}>
-			Abrir archivo
-		</span>
-	);
+	return <span className={disabled ? buttonToneDisabled : buttonTone}>Abrir archivo</span>;
 }
 
 export default OpenFileButton;
