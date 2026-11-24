@@ -1,0 +1,61 @@
+diff --git a/src/features/csv/FileSelector.tsx b/src/features/csv/FileSelector.tsx
+index b6903d1..45fbbfe 100644
+--- a/src/features/csv/FileSelector.tsx
++++ b/src/features/csv/FileSelector.tsx
+@@ -6,6 +6,17 @@ interface FileSelectorProps {
+ 	children: ReactNode;
+ }
+ 
++// id;nombre;apellidos;edad;ciudad;provincia;correo;profesion;empresa;observaciones
++const randomPatternLimits = [-1, 8, 8, -1, 10, 12, 6, 14, 16, 50];
++
++function randomPattern(maxLength: number) {
++	const letters = "abcdefghijklmnopqrstuvwxyz";
++	const length = Math.floor(Math.random() * maxLength) + 1;
++	return Array.from({ length }, () => letters[Math.floor(Math.random() * letters.length)]).join(
++		"",
++	);
++}
++
+ function FileSelector({ onFileSelected, disabled = false, children }: FileSelectorProps) {
+ 	const inputRef = useRef<HTMLInputElement>(null);
+ 
+@@ -33,7 +44,37 @@ function FileSelector({ onFileSelected, disabled = false, children }: FileSelect
+ 				className="rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+ 				disabled={disabled}
+ 				type="button"
+-				onClick={() => inputRef.current?.click()}
++				onClick={() =>
++					onFileSelected(
++						new File(
++							[
++								[
++									"id;nombre;apellidos;edad;ciudad;provincia;correo;profesion;empresa;observaciones",
++									...Array.from({ length: 1000 }, (_, index) =>
++										[
++											index + 1,
++											`Nombre ${index + 1}`,
++											`Apellido ${index + 1}`,
++											20 + (index % 45),
++											`Ciudad ${index + 1}`,
++											`Provincia ${index + 1}`,
++											`persona${index + 1}@ejemplo.com`,
++											`Profesión ${index + 1}`,
++											`Empresa ${index + 1}`,
++											`Observaciones de ejemplo para la fila ${index + 1}`,
++										]
++											.map(
++												(value, column) =>
++													`${value} ${randomPattern(randomPatternLimits[column])}`,
++											)
++											.join(";"),
++									),
++								].join("\n"),
++							],
++							"test.csv",
++						),
++					)
++				}
+ 			>
+ 				{children}
+ 			</button>
