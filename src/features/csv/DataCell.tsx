@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
+import { DETAILS_PANEL_ID } from "@components/DetailsPanel";
+
+import observeTruncation from "./observeTruncation";
+
 interface DataCellProps {
 	value: string;
 	onSelect: (value: string, trigger: HTMLButtonElement) => void;
@@ -13,25 +17,22 @@ function DataCell({ value, onSelect }: DataCellProps) {
 		const text = textRef.current;
 		if (!text) return;
 
-		const measure = () => setTruncated(text.scrollWidth > text.clientWidth);
-		const observer = new ResizeObserver(measure);
-		observer.observe(text);
-		measure();
-		return () => observer.disconnect();
+		return observeTruncation(text, setTruncated);
 	}, [value]);
 
 	return (
-		<div className="max-w-75 truncate" ref={textRef}>
-			{truncated ? (
+		<div className={`relative max-w-75 ${truncated ? "hover:underline" : ""}`}>
+			<div className="truncate" ref={textRef} aria-hidden={truncated || undefined}>
+				{value}
+			</div>
+			{truncated && (
 				<button
-					className="cursor-pointer text-left hover:underline"
+					aria-label={value}
+					aria-controls={DETAILS_PANEL_ID}
+					className="absolute inset-0 cursor-pointer rounded-xs focus-visible:outline-2 focus-visible:outline-orange-600"
 					onClick={(event) => onSelect(value, event.currentTarget)}
 					type="button"
-				>
-					{value}
-				</button>
-			) : (
-				value
+				/>
 			)}
 		</div>
 	);

@@ -7,23 +7,27 @@ interface DetailsPanelProps {
 	label: string;
 	title: string;
 	onClose: () => void;
+	trigger: HTMLButtonElement;
 	children: ReactNode;
 }
 
-function DetailsPanel({ id, label, title, onClose, children }: DetailsPanelProps) {
+function DetailsPanel({ id, label, title, onClose, trigger, children }: DetailsPanelProps) {
 	const closeButtonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		closeButtonRef.current?.focus();
-	}, [title]);
+	}, [trigger]);
 
 	return (
 		<aside
 			aria-label={label}
 			className="flex w-72 shrink-0 flex-col overflow-y-auto border-l border-orange-100 bg-white text-sm max-sm:absolute max-sm:inset-x-0 max-sm:bottom-0 max-sm:z-20 max-sm:max-h-1/2 max-sm:w-full max-sm:border-t max-sm:border-l-0 max-sm:shadow-lg"
 			id={id}
+			onKeyDown={(event) => {
+				if (event.key === "Escape") onClose();
+			}}
 		>
-			<div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-orange-100 bg-orange-50 px-4">
+			<div className="sticky top-0 flex h-12 shrink-0 items-center justify-between gap-2 border-b border-orange-100 bg-orange-50 px-4">
 				<h2 className="min-w-0 truncate font-semibold text-gray-700" title={title}>
 					{title}
 				</h2>

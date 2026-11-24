@@ -1,20 +1,25 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import columnStats from "./columnStats";
+import observeTruncation from "./observeTruncation";
 import type { CsvRow } from "./types";
 
 interface ColumnDetailsContentProps {
 	column: string;
 	rows: CsvRow[];
+	headerText: Element;
 }
 
 const LABEL_TONE = "text-xs uppercase tracking-wide text-gray-500";
 const VALUE_TONE = "font-mono text-sm text-gray-900";
 
-function ColumnDetailsContent({ column, rows }: ColumnDetailsContentProps) {
+function ColumnDetailsContent({ column, rows, headerText }: ColumnDetailsContentProps) {
 	const stats = useMemo(() => columnStats(rows, column), [rows, column]);
+	const [truncated, setTruncated] = useState(false);
+	useEffect(() => observeTruncation(headerText, setTruncated), [headerText]);
 	return (
 		<>
+			{truncated && <p className="wrap-anywhere whitespace-pre-wrap">{column}</p>}
 			<p className="text-xs text-gray-500">
 				{rows.length} fila{rows.length > 1 && "s"} visibles
 			</p>

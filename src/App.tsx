@@ -27,8 +27,8 @@ interface LoadedFile {
 }
 
 type SelectedDetails =
-	| { kind: "column"; value: string; trigger: HTMLButtonElement }
-	| { kind: "cell"; value: string; trigger: HTMLButtonElement };
+	| { kind: "column"; value: string; trigger: HTMLButtonElement; headerText: Element }
+	| { kind: "cell"; value: string; column: string; trigger: HTMLButtonElement };
 
 function App() {
 	return (
@@ -84,6 +84,7 @@ function Explorer() {
 
 	const handleQueryChange = (value: string) => {
 		setQuery(value);
+		clearCellSelection();
 		if (noResultsIdRef.current !== null) {
 			removeStatus(noResultsIdRef.current);
 			noResultsIdRef.current = null;
@@ -93,19 +94,27 @@ function Explorer() {
 		}
 	};
 
-	const handleSelectColumn = (column: string, trigger: HTMLButtonElement) => {
+	const clearCellSelection = () => {
+		setSelectedDetails((current) => (current?.kind === "cell" ? null : current));
+	};
+
+	const handleSelectColumn = (
+		column: string,
+		trigger: HTMLButtonElement,
+		headerText: Element,
+	) => {
 		setSelectedDetails((current) =>
 			current?.kind === "column" && current.value === column
 				? null
-				: { kind: "column", value: column, trigger },
+				: { kind: "column", value: column, trigger, headerText },
 		);
 	};
 
-	const handleSelectCell = (value: string, trigger: HTMLButtonElement) => {
-		setSelectedDetails({ kind: "cell", value, trigger });
+	const handleSelectCell = (column: string, value: string, trigger: HTMLButtonElement) => {
+		setSelectedDetails({ kind: "cell", column, value, trigger });
 	};
 
-	const handleCloseColumnDetails = () => {
+	const handleCloseDetails = () => {
 		setSelectedDetails(null);
 		if (selectedDetails?.trigger.isConnected && !selectedDetails.trigger.disabled) {
 			selectedDetails.trigger.focus();
@@ -139,10 +148,11 @@ function Explorer() {
 								headers={loaded.data.headers}
 								onSelectColumn={handleSelectColumn}
 								onSelectCell={handleSelectCell}
+								onPageChange={clearCellSelection}
 								rows={filteredRows}
 								selectedColumn={
 									selectedDetails?.kind === "column"
-										? selectedDetails.column
+										? selectedDetails.value
 										: null
 								}
 							/>
@@ -155,14 +165,16 @@ function Explorer() {
 						label={
 							selectedDetails.kind === "column"
 								? `Detalles de la columna ${selectedDetails.value}`
-								: "Detalles de la celda"
+								: `Detalles de la celda de la columna ${selectedDetails.column}`
 						}
-						onClose={handleCloseColumnDetails}
+						onClose={handleCloseDetails}
+						trigger={selectedDetails.trigger}
 						title={selectedDetails.value}
 					>
 						{selectedDetails.kind === "column" ? (
 							<ColumnDetailsContent
 								column={selectedDetails.value}
+								headerText={selectedDetails.headerText}
 								rows={filteredRows}
 							/>
 						) : (

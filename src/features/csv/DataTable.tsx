@@ -12,8 +12,8 @@ interface DataTableProps {
 	rows: CsvRow[];
 	startIndex: number;
 	selectedColumn: string | null;
-	onSelectColumn: (column: string, trigger: HTMLButtonElement) => void;
-	onSelectCell: (value: string, trigger: HTMLButtonElement) => void;
+	onSelectColumn: (column: string, trigger: HTMLButtonElement, headerText: Element) => void;
+	onSelectCell: (column: string, value: string, trigger: HTMLButtonElement) => void;
 }
 
 function DataTable({
@@ -53,7 +53,10 @@ function DataTable({
 								aria-expanded={isSelected(header)}
 								className="w-full cursor-pointer hover:underline hover:decoration-current"
 								type="button"
-								onClick={(event) => onSelectColumn(header, event.currentTarget)}
+								onClick={({ currentTarget }) => {
+									const text = currentTarget.firstElementChild;
+									if (text) onSelectColumn(header, currentTarget, text);
+								}}
 							>
 								<span className="block max-w-75 truncate">{header}</span>
 							</button>
@@ -74,7 +77,12 @@ function DataTable({
 								key={header}
 								title={row[header]}
 							>
-								<DataCell value={row[header]} onSelect={onSelectCell} />
+								<DataCell
+									value={row[header]}
+									onSelect={(value, trigger) =>
+										onSelectCell(header, value, trigger)
+									}
+								/>
 							</td>
 						))}
 					</tr>

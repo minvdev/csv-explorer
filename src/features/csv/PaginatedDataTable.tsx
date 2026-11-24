@@ -11,8 +11,9 @@ interface PaginatedDataTableProps {
 	headers: string[];
 	rows: CsvRow[];
 	selectedColumn: string | null;
-	onSelectColumn: (column: string, trigger: HTMLButtonElement) => void;
-	onSelectCell: (value: string, trigger: HTMLButtonElement) => void;
+	onSelectColumn: (column: string, trigger: HTMLButtonElement, headerText: Element) => void;
+	onPageChange: () => void;
+	onSelectCell: (column: string, value: string, trigger: HTMLButtonElement) => void;
 }
 
 function PaginatedDataTable({
@@ -21,6 +22,7 @@ function PaginatedDataTable({
 	selectedColumn,
 	onSelectColumn,
 	onSelectCell,
+	onPageChange,
 }: PaginatedDataTableProps) {
 	const [page, setPage] = useState(0);
 	const [lastRows, setLastRows] = useState(rows);
@@ -46,7 +48,10 @@ function PaginatedDataTable({
 			/>
 			<Pagination
 				className="sticky left-4 mt-auto mb-2 ml-4 max-w-[calc(100vw-2rem)] max-xs:left-2 max-xs:mb-0 max-xs:ml-2 max-xs:max-w-[calc(100vw-1rem)]"
-				onPageChange={setPage}
+				onPageChange={(next) => {
+					onPageChange();
+					setPage(next);
+				}}
 				page={currentPage}
 				pageCount={pageCount}
 			/>
