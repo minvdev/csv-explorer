@@ -43,7 +43,9 @@ function Toolbar({
 						shownRows={shownRows}
 						totalRows={totalRows}
 					/>
-					<Divider />
+					<div className="max-xs:hidden">
+						<Divider />
+					</div>
 				</>
 			)}
 			<div className="flex-1" />
