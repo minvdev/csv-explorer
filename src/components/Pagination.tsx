@@ -12,7 +12,7 @@ function Pagination({ page, pageCount, onPageChange, className }: PaginationProp
 	const isLastPage = page === pageCount - 1;
 
 	return (
-		<div className={`flex items-center gap-3 ${className}`}>
+		<div className={`flex flex-wrap items-center gap-3 ${className}`}>
 			<button
 				className={`${buttonTone} ${isFirstPage ? "select-none" : ""}`}
 				disabled={isFirstPage}

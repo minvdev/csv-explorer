@@ -33,7 +33,7 @@ function PaginatedDataTable({
 	const visibleRows = rows.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
 
 	return (
-		<div className="flex min-h-full w-full flex-col items-start gap-2 pb-2">
+		<div className="flex min-h-full w-max min-w-full flex-col items-start gap-4 pb-2 max-xs:gap-2">
 			<DataTable
 				headers={headers}
 				onSelectColumn={onSelectColumn}
@@ -42,7 +42,7 @@ function PaginatedDataTable({
 				startIndex={currentPage * PAGE_SIZE}
 			/>
 			<Pagination
-				className="mt-auto ml-2"
+				className="sticky left-4 mt-auto mb-2 ml-4 max-w-[calc(100vw-2rem)] max-xs:left-2 max-xs:mb-0 max-xs:ml-2 max-xs:max-w-[calc(100vw-1rem)]"
 				onPageChange={setPage}
 				page={currentPage}
 				pageCount={pageCount}
