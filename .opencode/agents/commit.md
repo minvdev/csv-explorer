@@ -1,7 +1,7 @@
 ---
 description: Crea commits Git coherentes siguiendo las convenciones del proyecto
 mode: primary
-model: openai/gpt-6-luna-fast
+model: openai/gpt-6-luna
 permissions:
     - action: "*"
       resource: "*"
