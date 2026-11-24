@@ -12,6 +12,7 @@ interface PaginatedDataTableProps {
 	rows: CsvRow[];
 	selectedColumn: string | null;
 	onSelectColumn: (column: string, trigger: HTMLButtonElement) => void;
+	onSelectCell: (value: string, trigger: HTMLButtonElement) => void;
 }
 
 function PaginatedDataTable({
@@ -19,6 +20,7 @@ function PaginatedDataTable({
 	rows,
 	selectedColumn,
 	onSelectColumn,
+	onSelectCell,
 }: PaginatedDataTableProps) {
 	const [page, setPage] = useState(0);
 	const [lastRows, setLastRows] = useState(rows);
@@ -37,6 +39,7 @@ function PaginatedDataTable({
 			<DataTable
 				headers={headers}
 				onSelectColumn={onSelectColumn}
+				onSelectCell={onSelectCell}
 				rows={visibleRows}
 				selectedColumn={selectedColumn}
 				startIndex={currentPage * PAGE_SIZE}

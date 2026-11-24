@@ -1,29 +1,20 @@
 import { useMemo } from "react";
 
-import DetailsPanel from "@components/DetailsPanel";
-
 import columnStats from "./columnStats";
 import type { CsvRow } from "./types";
 
-interface ColumnDetailsPanelProps {
+interface ColumnDetailsContentProps {
 	column: string;
 	rows: CsvRow[];
-	onClose: () => void;
 }
 
 const LABEL_TONE = "text-xs uppercase tracking-wide text-gray-500";
 const VALUE_TONE = "font-mono text-sm text-gray-900";
-export const COLUMN_DETAILS_PANEL_ID = "column-details-panel";
 
-function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) {
+function ColumnDetailsContent({ column, rows }: ColumnDetailsContentProps) {
 	const stats = useMemo(() => columnStats(rows, column), [rows, column]);
 	return (
-		<DetailsPanel
-			id={COLUMN_DETAILS_PANEL_ID}
-			label={`Detalles de la columna ${column}`}
-			onClose={onClose}
-			title={column}
-		>
+		<>
 			<p className="text-xs text-gray-500">
 				{rows.length} fila{rows.length > 1 && "s"} visibles
 			</p>
@@ -45,8 +36,8 @@ function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) 
 			) : (
 				<p className="text-gray-600">Esta columna no tiene datos numéricos</p>
 			)}
-		</DetailsPanel>
+		</>
 	);
 }
 
-export default ColumnDetailsPanel;
+export default ColumnDetailsContent;

@@ -1,5 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
+export const DETAILS_PANEL_ID = "details-panel";
+
 interface DetailsPanelProps {
 	id: string;
 	label: string;

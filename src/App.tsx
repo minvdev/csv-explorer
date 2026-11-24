@@ -1,11 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 
+import DetailsPanel, { DETAILS_PANEL_ID } from "@components/DetailsPanel";
 import StatusBar from "@components/status/StatusBar";
 import type { StatusId } from "@components/status/StatusContext";
 import StatusProvider from "@components/status/StatusProvider";
 import { useStatus } from "@components/status/useStatus";
 import Toolbar from "@components/toolbar/Toolbar";
-import ColumnDetailsPanel from "@features/csv/ColumnDetailsPanel";
+import ColumnDetailsContent from "@features/csv/ColumnDetailsContent";
 import filterRows, { hasResults } from "@features/csv/filterRows";
 import PaginatedDataTable from "@features/csv/PaginatedDataTable";
 import parseCsv, { CsvParseError } from "@features/csv/parseCsv";
@@ -25,6 +26,10 @@ interface LoadedFile {
 	fileName: string;
 }
 
+type SelectedDetails =
+	| { kind: "column"; value: string; trigger: HTMLButtonElement }
+	| { kind: "cell"; value: string; trigger: HTMLButtonElement };
+
 function App() {
 	return (
 		<StatusProvider>
@@ -38,9 +43,8 @@ function Explorer() {
 	const [loaded, setLoaded] = useState<LoadedFile | null>(null);
 	const [query, setQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
+	const [selectedDetails, setSelectedDetails] = useState<SelectedDetails | null>(null);
 	const noResultsIdRef = useRef<StatusId | null>(null);
-	const selectedColumnTriggerRef = useRef<HTMLButtonElement | null>(null);
 	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	const filteredRows = useMemo(
@@ -49,7 +53,7 @@ function Explorer() {
 	);
 
 	const handleFileSelected = async (file: File) => {
-		setSelectedColumn(null);
+		setSelectedDetails(null);
 		setLoaded(null);
 		setQuery("");
 		clearStatuses();
@@ -90,14 +94,21 @@ function Explorer() {
 	};
 
 	const handleSelectColumn = (column: string, trigger: HTMLButtonElement) => {
-		selectedColumnTriggerRef.current = trigger;
-		setSelectedColumn(selectedColumn === column ? null : column);
+		setSelectedDetails((current) =>
+			current?.kind === "column" && current.value === column
+				? null
+				: { kind: "column", value: column, trigger },
+		);
+	};
+
+	const handleSelectCell = (value: string, trigger: HTMLButtonElement) => {
+		setSelectedDetails({ kind: "cell", value, trigger });
 	};
 
 	const handleCloseColumnDetails = () => {
-		setSelectedColumn(null);
-		if (selectedColumnTriggerRef.current?.isConnected) {
-			selectedColumnTriggerRef.current.focus();
+		setSelectedDetails(null);
+		if (selectedDetails?.trigger.isConnected && !selectedDetails.trigger.disabled) {
+			selectedDetails.trigger.focus();
 		} else {
 			searchInputRef.current?.focus();
 		}
@@ -127,18 +138,39 @@ function Explorer() {
 							<PaginatedDataTable
 								headers={loaded.data.headers}
 								onSelectColumn={handleSelectColumn}
+								onSelectCell={handleSelectCell}
 								rows={filteredRows}
-								selectedColumn={selectedColumn}
+								selectedColumn={
+									selectedDetails?.kind === "column"
+										? selectedDetails.column
+										: null
+								}
 							/>
 						)}
 					</main>
 				</div>
-				{loaded && selectedColumn !== null && (
-					<ColumnDetailsPanel
-						column={selectedColumn}
+				{loaded && selectedDetails && (
+					<DetailsPanel
+						id={DETAILS_PANEL_ID}
+						label={
+							selectedDetails.kind === "column"
+								? `Detalles de la columna ${selectedDetails.value}`
+								: "Detalles de la celda"
+						}
 						onClose={handleCloseColumnDetails}
-						rows={filteredRows}
-					/>
+						title={selectedDetails.value}
+					>
+						{selectedDetails.kind === "column" ? (
+							<ColumnDetailsContent
+								column={selectedDetails.value}
+								rows={filteredRows}
+							/>
+						) : (
+							<p className="wrap-anywhere whitespace-pre-wrap">
+								{selectedDetails.value}
+							</p>
+						)}
+					</DetailsPanel>
 				)}
 			</div>
 		</div>
