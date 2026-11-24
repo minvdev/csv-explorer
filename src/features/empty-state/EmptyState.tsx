@@ -8,13 +8,17 @@ interface EmptyStateProps {
 
 function EmptyState({ isLoading, onFileSelected }: EmptyStateProps) {
 	return (
-		<section className="relative flex min-h-full items-center overflow-hidden bg-linear-to-br from-orange-50/70 via-white to-white px-6">
+		<section className="relative flex min-h-full items-center overflow-hidden bg-linear-to-br from-orange-50/70 via-white to-white px-6 max-sm:px-4">
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-2/5 bg-orange-50 lg:block"
 			/>
-			<div className="relative mx-auto grid w-full max-w-5xl items-center gap-12 py-12 lg:grid-cols-2">
-				<div className="max-w-md">
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-orange-100/60 to-transparent lg:hidden"
+			/>
+			<div className="relative mx-auto grid w-full max-w-5xl items-center gap-12 py-12 lg:grid-cols-2 [@media(max-height:700px)]:grid-cols-1 [@media(max-height:400px)]:py-4">
+				<div className="mx-auto max-w-md lg:mx-0">
 					<p className="text-sm font-semibold tracking-wide text-orange-600 uppercase">
 						CSV Explorer
 					</p>
@@ -35,7 +39,7 @@ function EmptyState({ isLoading, onFileSelected }: EmptyStateProps) {
 				</div>
 				<div
 					aria-hidden="true"
-					className="relative mx-auto w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow-lg shadow-orange-950/5"
+					className="relative mx-auto w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow-lg shadow-orange-950/5 [@media(max-height:700px)]:hidden"
 				>
 					<div className="mb-4 flex items-center gap-1.5">
 						<span className="size-2 rounded-full bg-orange-200" />
