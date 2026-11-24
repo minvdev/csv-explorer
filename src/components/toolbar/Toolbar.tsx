@@ -33,7 +33,7 @@ function Toolbar({
 }: ToolbarProps) {
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-3 border-b border-orange-100 bg-orange-50 px-4">
-			<Brand />
+			<Brand hasFile={Boolean(fileName)} />
 			{fileName && (
 				<>
 					<Divider />
@@ -53,7 +53,7 @@ function Toolbar({
 				<SearchField onChange={onQueryChange} ref={searchInputRef} value={query} />
 			)}
 			<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
-				<OpenFileButton disabled={isLoading} />
+				<OpenFileButton disabled={isLoading} hasFile={Boolean(fileName)} />
 			</FileSelector>
 		</header>
 	);
