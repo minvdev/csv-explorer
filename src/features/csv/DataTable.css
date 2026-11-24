@@ -1,0 +1,21 @@
+@layer components {
+	.csv-table :is(th, td) {
+		border: solid var(--color-gray-300);
+		border-width: 0 1px 1px 0;
+	}
+
+	.csv-table tr > :first-child {
+		border-left-width: 1px;
+	}
+
+	.csv-table th {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		border-top-width: 1px;
+	}
+
+	.csv-table tr:last-child > [data-col-selected] {
+		border-bottom-color: var(--color-orange-400);
+	}
+}

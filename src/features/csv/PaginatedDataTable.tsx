@@ -5,7 +5,7 @@ import Pagination from "@components/Pagination";
 import DataTable from "./DataTable";
 import type { CsvRow } from "./types";
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 100;
 
 interface PaginatedDataTableProps {
 	headers: string[];
