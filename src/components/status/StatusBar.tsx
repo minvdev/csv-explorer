@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { StatusTone } from "./StatusContext";
 import { useStatus } from "./useStatus";
 
-const BAND_TONE = "flex h-12 shrink-0 items-center px-4 text-sm";
+const BAND_TONE = "flex min-h-12 shrink-0 items-center gap-3 px-4 py-2 text-sm";
 
 const CLASS_BY_TONE: Record<StatusTone, string> = {
 	info: "bg-gray-100 text-gray-600",
@@ -53,7 +53,7 @@ function StatusBar() {
 					{status.dismissible && (
 						<button
 							aria-label="Cerrar mensaje"
-							className="ml-auto cursor-pointer rounded px-1 text-base leading-none hover:bg-black/10"
+							className="ml-auto flex size-5 shrink-0 cursor-pointer items-center justify-center rounded text-base leading-none hover:bg-black/10"
 							type="button"
 							onClick={() => removeStatus(status.id)}
 						>
