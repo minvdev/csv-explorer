@@ -24,7 +24,7 @@ function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) 
 	return (
 		<aside
 			aria-label={`Detalles de la columna ${column}`}
-			className="flex w-72 shrink-0 flex-col overflow-y-auto border-l border-orange-100 bg-white text-sm"
+			className="flex w-72 shrink-0 flex-col overflow-y-auto border-l border-orange-100 bg-white text-sm max-sm:absolute max-sm:inset-x-0 max-sm:bottom-0 max-sm:z-20 max-sm:max-h-1/2 max-sm:w-full max-sm:border-t max-sm:border-l-0 max-sm:shadow-lg"
 			id={COLUMN_DETAILS_PANEL_ID}
 		>
 			<div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-orange-100 bg-orange-50 px-4">
@@ -33,7 +33,7 @@ function ColumnDetailsPanel({ column, rows, onClose }: ColumnDetailsPanelProps) 
 				</h2>
 				<button
 					aria-label="Cerrar detalles"
-					className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded text-lg text-gray-500 hover:bg-orange-100 hover:text-orange-700"
+					className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded text-lg text-gray-500 hover:bg-orange-100 hover:text-orange-700 max-sm:size-10"
 					onClick={onClose}
 					ref={closeButtonRef}
 					type="button"
