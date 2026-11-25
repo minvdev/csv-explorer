@@ -49,3 +49,7 @@ Utilicé agentes de IA con OpenCode como apoyo durante todo el proyecto. Mi expe
 Álvaro Martínez Iniesta · [GitHub](https://github.com/minvdev) · [LinkedIn](https://www.linkedin.com/in/minvdev)
 
 [Hoja de ruta](docs/roadmap.md) (sin planes de ampliación definidos).
+
+## Licencia
+
+Este proyecto está disponible bajo la [licencia MIT](LICENSE).
