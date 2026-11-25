@@ -2,18 +2,20 @@ import filePlusUrl from "@/assets/file-plus.svg";
 import { buttonTone, buttonToneDisabled } from "@components/ui";
 
 interface OpenFileButtonProps {
-	disabled?: boolean;
+	isLoading: boolean;
 	hasFile: boolean;
 }
 
-function OpenFileButton({ disabled = false, hasFile }: OpenFileButtonProps) {
+function OpenFileButton({ isLoading, hasFile }: OpenFileButtonProps) {
 	return (
 		<span
-			className={`${disabled ? buttonToneDisabled : buttonTone} ${
-				hasFile ? "max-xs:w-8 max-xs:justify-center max-xs:px-0" : ""
+			className={`${isLoading ? buttonToneDisabled : buttonTone} ${
+				hasFile && !isLoading ? "max-xs:w-8 max-xs:justify-center max-xs:px-0" : ""
 			}`}
 		>
-			{hasFile ? (
+			{isLoading ? (
+				"Cargando..."
+			) : hasFile ? (
 				<>
 					<img className="hidden size-4 shrink-0 max-xs:block" src={filePlusUrl} alt="" />
 					<span className="max-xs:sr-only">Abrir</span>

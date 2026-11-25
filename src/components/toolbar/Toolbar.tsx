@@ -53,7 +53,7 @@ function Toolbar({
 			)}
 			<div className={fileName ? "shrink-0" : "ml-auto shrink-0"}>
 				<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
-					<OpenFileButton disabled={isLoading} hasFile={Boolean(fileName)} />
+					<OpenFileButton isLoading={isLoading} hasFile={Boolean(fileName)} />
 				</FileSelector>
 			</div>
 		</header>

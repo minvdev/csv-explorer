@@ -32,7 +32,7 @@ function EmptyState({ isLoading, onFileSelected }: EmptyStateProps) {
 					<div className="mt-7">
 						<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
 							<span className={isLoading ? buttonToneDisabled : buttonTone}>
-								Abrir archivo CSV
+								{isLoading ? "Cargando..." : "Abrir archivo CSV"}
 							</span>
 						</FileSelector>
 					</div>
