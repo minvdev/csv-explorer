@@ -1,4 +1,4 @@
-import Papa from "papaparse";
+import type { ParseResult } from "papaparse";
 
 import type { CsvData, CsvRow } from "./types";
 
@@ -32,39 +32,47 @@ function parseCsv(text: string): Promise<CsvData> {
 			return;
 		}
 
-		Papa.parse<CsvRow>(text, {
-			header: true,
-			skipEmptyLines: "greedy",
-			worker: true,
-			complete: (results) => {
-				const tolerated = results.errors.filter((error) =>
-					TOLERATED_ERROR_CODES.has(error.code),
-				);
-				const fatal = results.errors.find(
-					(error) => !TOLERATED_ERROR_CODES.has(error.code),
-				);
-				if (fatal) {
-					reject(new CsvParseError("invalid", `invalid CSV: ${fatal.message}`));
-					return;
-				}
-
-				if (!results.meta.fields || results.data.length === 0) {
-					reject(new CsvParseError("empty", "The CSV file does not contain rows"));
-					return;
-				}
-
-				resolve({
-					headers: results.meta.fields,
-					rows: results.data.map((row) =>
-						sanitizeRow(row, results.meta.fields as string[]),
-					),
-					warnings: tolerated.map((error) => error.code),
-				});
-			},
-			error: (error: Error) => {
-				reject(error);
-			},
+		const worker = new Worker(new URL("./csv.worker.ts", import.meta.url), {
+			type: "module",
 		});
+
+		worker.onmessage = (event: MessageEvent<ParseResult<CsvRow>>) => {
+			worker.terminate();
+			const results = event.data;
+			const tolerated = results.errors.filter((error) =>
+				TOLERATED_ERROR_CODES.has(error.code),
+			);
+			const fatal = results.errors.find((error) => !TOLERATED_ERROR_CODES.has(error.code));
+			if (fatal) {
+				reject(new CsvParseError("invalid", `invalid CSV: ${fatal.message}`));
+				return;
+			}
+
+			if (!results.meta.fields || results.data.length === 0) {
+				reject(new CsvParseError("empty", "The CSV file does not contain rows"));
+				return;
+			}
+
+			resolve({
+				headers: results.meta.fields,
+				rows: results.data.map((row) => sanitizeRow(row, results.meta.fields as string[])),
+				warnings: tolerated.map((error) => error.code),
+			});
+		};
+		worker.onerror = () => {
+			worker.terminate();
+			reject(new Error("CSV worker failed"));
+		};
+		worker.onmessageerror = () => {
+			worker.terminate();
+			reject(new Error("CSV worker returned an unreadable message"));
+		};
+		try {
+			worker.postMessage(text);
+		} catch (error) {
+			worker.terminate();
+			reject(error);
+		}
 	});
 }
 

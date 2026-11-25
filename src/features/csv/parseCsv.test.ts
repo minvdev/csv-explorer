@@ -1,6 +1,31 @@
-import { describe, expect, it } from "vitest";
+import Papa from "papaparse";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import parseCsv, { CsvParseError } from "./parseCsv";
+import type { CsvRow } from "./types";
+
+class TestWorker {
+	onmessage: ((event: MessageEvent<Papa.ParseResult<CsvRow>>) => void) | null = null;
+	onerror: (() => void) | null = null;
+	onmessageerror: (() => void) | null = null;
+	terminate = vi.fn();
+
+	postMessage(text: string) {
+		queueMicrotask(() => {
+			const data = Papa.parse<CsvRow>(text, { header: true, skipEmptyLines: "greedy" });
+			this.onmessage?.({ data } as MessageEvent<Papa.ParseResult<CsvRow>>);
+		});
+	}
+}
+
+beforeEach(() => {
+	vi.stubGlobal("Worker", TestWorker);
+});
+
+afterEach(() => {
+	vi.unstubAllGlobals();
+	vi.restoreAllMocks();
+});
 
 async function parseErrorOf(text: string): Promise<CsvParseError> {
 	try {
@@ -13,6 +38,34 @@ async function parseErrorOf(text: string): Promise<CsvParseError> {
 }
 
 describe("parseCsv", () => {
+	it("terminates the worker and rejects when it fails", async () => {
+		const terminate = vi.fn();
+		class FailedWorker {
+			onerror: (() => void) | null = null;
+			terminate = terminate;
+			postMessage() {
+				queueMicrotask(() => this.onerror?.());
+			}
+		}
+		vi.stubGlobal("Worker", FailedWorker);
+		await expect(parseCsv("a,b\n1,2")).rejects.toThrow("CSV worker failed");
+		expect(terminate).toHaveBeenCalledOnce();
+	});
+
+	it("terminates the worker and rejects unreadable messages", async () => {
+		const terminate = vi.fn();
+		class FailedWorker {
+			onmessageerror: (() => void) | null = null;
+			terminate = terminate;
+			postMessage() {
+				queueMicrotask(() => this.onmessageerror?.());
+			}
+		}
+		vi.stubGlobal("Worker", FailedWorker);
+		await expect(parseCsv("a,b\n1,2")).rejects.toThrow("unreadable message");
+		expect(terminate).toHaveBeenCalledOnce();
+	});
+
 	it("parses headers and rows from a valid CSV", async () => {
 		const data = await parseCsv("nombre,edad\nAna,30\nLuis,25");
 		expect(data.headers).toEqual(["nombre", "edad"]);
