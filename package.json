@@ -10,7 +10,8 @@
 		"test": "vitest --run",
 		"test:watch": "vitest",
 		"format": "oxfmt",
-		"format:check": "oxfmt --check"
+		"format:check": "oxfmt --check",
+		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@tailwindcss/vite": "^4.3.5",
