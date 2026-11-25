@@ -10,7 +10,7 @@ interface SearchFieldProps {
 
 function SearchField({ value, onChange, ref }: SearchFieldProps) {
 	return (
-		<label className="relative flex h-8 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-sm transition-colors focus-within:border-orange-500">
+		<label className="relative ml-auto flex h-8 shrink-0 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-sm transition-colors focus-within:border-orange-500">
 			<img src={searchUrl} alt="" />
 			{!value && (
 				<span
@@ -22,7 +22,7 @@ function SearchField({ value, onChange, ref }: SearchFieldProps) {
 			)}
 			<input
 				aria-label="Buscar filas"
-				className="outline-none max-sm:w-20 max-sm:placeholder:text-transparent"
+				className="toolbar-search outline-none max-sm:placeholder:text-transparent max-xs:w-24 xs:max-sm:w-20"
 				placeholder="Buscar filas"
 				ref={ref}
 				type="search"

@@ -8,7 +8,11 @@ interface OpenFileButtonProps {
 
 function OpenFileButton({ disabled = false, hasFile }: OpenFileButtonProps) {
 	return (
-		<span className={disabled ? buttonToneDisabled : buttonTone}>
+		<span
+			className={`${disabled ? buttonToneDisabled : buttonTone} ${
+				hasFile ? "max-xs:w-8 max-xs:justify-center max-xs:px-0" : ""
+			}`}
+		>
 			{hasFile ? (
 				<>
 					<img className="hidden size-4 shrink-0 max-xs:block" src={filePlusUrl} alt="" />

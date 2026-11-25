@@ -12,14 +12,12 @@ function FileDetails({ fileName, shownRows, totalRows, columns }: FileDetailsPro
 	const detail = searching
 		? `${shownRows} de ${totalRows} filas`
 		: `${totalRows} ${totalRows === 1 ? "fila" : "filas"}, ${columns} ${columns === 1 ? "columna" : "columnas"}`;
-	const compactDetail = searching
-		? `${shownRows} de ${totalRows} x ${columns}`
-		: `${totalRows} x ${columns}`;
+	const compactDetail = searching ? `${shownRows} de ${totalRows}` : `${totalRows} x ${columns}`;
 
 	return (
-		<div className="flex min-w-0 items-center gap-2 font-mono whitespace-nowrap">
+		<div className="flex min-w-0 items-center gap-2 font-mono whitespace-nowrap max-xs:hidden">
 			<span
-				className="max-w-175 min-w-0 truncate text-xs font-semibold text-gray-900 max-2xl:max-w-100 max-xl:max-w-50 max-lg:max-w-25 max-xs:hidden"
+				className="max-w-175 min-w-0 truncate text-xs font-semibold text-gray-900 max-2xl:max-w-100 max-xl:max-w-50 max-lg:max-w-25"
 				title={fileName}
 			>
 				{fileName}

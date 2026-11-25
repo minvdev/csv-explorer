@@ -48,13 +48,14 @@ function Toolbar({
 					</div>
 				</>
 			)}
-			<div className="flex-1" />
 			{fileName && (
 				<SearchField onChange={onQueryChange} ref={searchInputRef} value={query} />
 			)}
-			<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
-				<OpenFileButton disabled={isLoading} hasFile={Boolean(fileName)} />
-			</FileSelector>
+			<div className={fileName ? "shrink-0" : "ml-auto shrink-0"}>
+				<FileSelector disabled={isLoading} onFileSelected={onFileSelected}>
+					<OpenFileButton disabled={isLoading} hasFile={Boolean(fileName)} />
+				</FileSelector>
+			</div>
 		</header>
 	);
 }
