@@ -13,6 +13,7 @@
 		top: 0;
 		z-index: 1;
 		border-top-width: 1px;
+		box-shadow: 0 -1px 0 var(--color-gray-300);
 	}
 
 	.csv-table tr:last-child > [data-col-selected] {
