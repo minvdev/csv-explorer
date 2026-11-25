@@ -16,7 +16,7 @@ y filtrarlos mediante una búsqueda de texto.
 - [x] Worker para evitar bloqueo con el parser.
 - [x] Selector de columnas numéricas con resumen de datos: mínimo, máximo y media.
 - [x] Parser robusto: soporte de comillas, separadores, celdas vacías y entradas inválidas.
-- [ ] Diseño final pulido con estilos modernos.
+- [x] Diseño final pulido con estilos modernos.
 
 ## Fuera de alcance
 
