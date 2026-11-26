@@ -2,6 +2,8 @@
 
 CSV Explorer es un visor de archivos CSV para cuando solo necesitas abrir una tabla, encontrar un dato o consultar unas cifras. El archivo se procesa en tu navegador: su contenido no se envía a ningún servidor. Lo desarrollé como proyecto de portfolio y para usarlo yo mismo al trabajar con datos sensibles.
 
+[Abrir CSV Explorer](https://minvdev.github.io/csv-explorer/)
+
 ![CSV Explorer con un archivo abierto en la tabla](screenshots/csv-desktop.png)
 
 [Pantalla inicial](screenshots/empty-state.png) · [Vista en móvil](screenshots/csv-mobile.png)
