@@ -16,5 +16,4 @@ export default defineConfig({
 			"@components": path.resolve(dirname, "./src/components"),
 		},
 	},
-	base: "/csv-explorer/",
 });
